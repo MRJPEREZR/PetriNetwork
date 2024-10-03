@@ -48,15 +48,6 @@ public class Dashboard {
 		
 		HashMap<String, Place> places_after = net.getPlaces();
 		System.out.println(places_after);
-		
-		net.rmArc("a3");
-
-		System.out.println(net.getArcs());
-
-		System.out.println(net.getTransition("t1").toString());
-		
-		
-		
 	}
 
 }
