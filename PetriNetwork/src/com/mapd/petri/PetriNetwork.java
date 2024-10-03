@@ -123,13 +123,4 @@ public class PetriNetwork implements IPetriNetwork{
 		}
 		return fireableTransitions;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
