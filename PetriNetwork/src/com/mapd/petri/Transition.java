@@ -107,4 +107,9 @@ public class Transition {
 		}
 	}
 
+	@Override
+	public String toString () {
+		return "" + this.getInArcs();
+	}
+
 }

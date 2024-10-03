@@ -43,7 +43,16 @@ The UML model was created to be aligned with the following prepositions:
 ![Sequence Diagram](Docs/Modelling/Example.png)
 
 #### General execution
-![Sequence Diagram](Docs/Modelling/SequenceDiagramGeneral1.png)
+![Sequence Diagram](Docs/Modelling/FinalSequenceDiagramGeneral.png)
 
 #### Fire()
 ![Sequence Diagram](Docs/Modelling/SequenceDiagramFire1.png)
+
+#### isTransitionFireable()
+![Sequence Diagram](Docs/Modelling/isTransitionFireable.png)
+
+### OutArcIsFireable()
+![Sequence Diagram](Docs/Modelling/OutArcIsFireableSequenceDiagram.png)
+
+
+
