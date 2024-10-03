@@ -36,9 +36,13 @@ The UML model was created to be aligned with the following prepositions:
 ## Modelling
 
 ### Class Diagram
-![Sequence Diagram](Docs/Modelling/PetriNetwork-Class%20Diagram.drawio.svg)
+![Sequence Diagram](Docs/Modelling/DiagramClass1.png)
 
 
 ### Sequence diagram
 
-![Sequence Diagram](Docs/Modelling/PetriNetwork-Sequence%20Diagram%201.drawio.svg)
+#### General execution
+![Sequence Diagram](Docs/Modelling/SequenceDiagramGeneral1.png)
+
+#### Fire()
+![Sequence Diagram](Docs/Modelling/SequenceDiagramFire1.png)
