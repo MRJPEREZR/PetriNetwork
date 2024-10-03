@@ -1,3 +1,7 @@
 *.dtmp
 *.bkp
 /.metadata/
+.settings/
+bin/
+.classpath/
+.project

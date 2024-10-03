@@ -100,7 +100,7 @@ public class Transition {
 				newDestinationToken = destinationToken + inArc.getWeight();
 				
 				destinationPlace.setToken(newDestinationToken);
-			}
+			} 
 			
 		}else {
 			System.out.println("Transition is not fireable");
