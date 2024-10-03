@@ -6,12 +6,12 @@ public class OutArc extends Arc {
 		super();
 	};
 	
-	OutArc(Place place, Transition transition){
-		super(place, transition);
+	OutArc(Place place){
+		super(place);
 	};
 	
-	OutArc(Place place, Transition transition, int weight){
-		super(place, transition, weight);
+	OutArc(Place place, int weight){
+		super(place, weight);
 	};
 	
 	@Override

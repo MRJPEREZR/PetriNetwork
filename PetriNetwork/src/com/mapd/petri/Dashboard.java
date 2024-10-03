@@ -19,6 +19,7 @@ public class Dashboard {
 		net.addPlace("p3");
 		
 		net.addPlace("p4");
+		net.setPlaceToken("p4", 1);
 		
 		net.addTransition("t1");
 		
@@ -29,6 +30,7 @@ public class Dashboard {
 		
 		
 		net.addInArc("a3", "p3", "t1");
+		net.setArcWeight("a3", 3);
 		
 		net.addInArc("a4", "p4", "t1");
 		
@@ -36,19 +38,20 @@ public class Dashboard {
 		
 		System.out.println(fireableTransitions);
 		
-		net.fire(fireableTransitions.get(0));
-		
-		Transition t1 = net.getTransition("t1");
-		System.out.println(t1);
-		
-		HashMap<String, Place> places = net.getPlaces();
-		System.out.println(places);
+		HashMap<String, Place> places_before = net.getPlaces();
+		System.out.println(places_before);
 		
 		HashMap<String, Arc> arcs = net.getArcs();
 		System.out.println(arcs);
 		
-		HashMap<String, Transition> trans = net.getTransitions();
-		System.out.println(trans);
+		net.fire(fireableTransitions.get(0));
+		
+		HashMap<String, Place> places_after = net.getPlaces();
+		System.out.println(places_after);
+		
+		
+		
+		
 		
 		
 		

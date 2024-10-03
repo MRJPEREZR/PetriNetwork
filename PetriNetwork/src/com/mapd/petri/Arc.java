@@ -3,22 +3,19 @@ package com.mapd.petri;
 public abstract class Arc {
 	
 	private Place place;
-	private Transition transition;
 	private int weight;
 	
 	Arc(){
 		this.weight = 1;
 	};
 	
-	Arc(Place place, Transition transition){
+	Arc(Place place){
 		this.place = place;
-		this.transition = transition;
 		this.weight = 1;
 	};
 	
-	Arc(Place place, Transition transition, int weight){
+	Arc(Place place, int weight){
 		this.place = place;
-		this.transition = transition;
 		this.weight = weight;
 	};
 	
@@ -28,12 +25,6 @@ public abstract class Arc {
 	public void setPlace(Place place) {
 		this.place = place;
 	}
-	public Transition getTransition() {
-		return transition;
-	}
-	public void setTransition(Transition transition) {
-		this.transition = transition;
-	}
 	public int getWeight() {
 		return weight;
 	}
@@ -42,4 +33,9 @@ public abstract class Arc {
 	}
 	
 	public abstract Boolean isFireable();
+	
+	@Override
+	public String toString() {
+		return "Arc has weight " + this.weight;
+	}
 }

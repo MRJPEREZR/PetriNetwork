@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class PetriNetwork implements IPetriNetwork{
 	
@@ -80,19 +79,20 @@ public class PetriNetwork implements IPetriNetwork{
 		this.transitions.remove(label);
 		
 	}
-
+	
 	@Override
-	public void addInArc(String label, String fromTransition, String toPlace) {
-		InArc inArc = new InArc(places.get(toPlace), transitions.get(fromTransition)); 
+	public void addInArc(String label, String toPlace, String fromTransition) {
+		InArc inArc = new InArc(places.get(toPlace)); 
 		this.arcs.put(label, inArc);
+		this.transitions.get(fromTransition).addInArc(inArc);
 		
 	}
 
 	@Override
 	public void addOutArc(String label, String fromPlace, String toTransition) {
-		OutArc outArc = new OutArc(places.get(fromPlace), transitions.get(toTransition));
+		OutArc outArc = new OutArc(places.get(fromPlace));
 		this.arcs.put(label, outArc);
-		
+		this.transitions.get(toTransition).addOutArc(outArc);
 	}
 
 	@Override
@@ -107,55 +107,7 @@ public class PetriNetwork implements IPetriNetwork{
 
 	@Override
 	public void fire(String label) {
-		Transition t = transitions.get(label);
-		Boolean isFireable = t.isFireable(); 
-		if (isFireable) {
-			Set<InArc> inArcs = t.getInArcs();
-			Iterator<InArc> inArcsIterator = inArcs.iterator();
-			
-			Set<OutArc> outArcs = t.getOutArcs();
-			Iterator<OutArc> outArcsIterator = outArcs.iterator();
-			
-			Place sourcePlace;
-			int sourceToken = 0;
-			int newSourceToken = 0;
-			
-			Place destinationPlace;
-			int destinationToken = 0;
-			int newDestinationToken = 0;
-			
-			System.out.println("Firing ...");
-			System.out.println(inArcs);
-			System.out.println(outArcs);
-			
-			
-			while(outArcsIterator.hasNext()) {
-				OutArc outArc = outArcsIterator.next(); 
-				sourcePlace = outArc.getPlace();
-				sourceToken = sourcePlace.getToken();
-				newSourceToken = sourceToken - outArcsIterator.next().getWeight();
-				outArcsIterator.next().getPlace().setToken(newSourceToken);
-				
-				System.out.println("Source places");
-				System.out.println("Before >> After");
-				// System.out.printf("%s: %d >> %s: %d", sourcePlace.getLabel(), sourceToken, sourcePlace.getLabel(), newSourceToken);
-			}
-			
-			while(inArcsIterator.hasNext()) {
-				destinationPlace = inArcsIterator.next().getPlace();
-				destinationToken = destinationPlace.getToken();
-				newDestinationToken = destinationToken + inArcsIterator.next().getWeight();
-				inArcsIterator.next().getPlace().setToken(newDestinationToken);
-				
-				System.out.println("Destination places");
-				System.out.println("Before >> After");
-				// System.out.printf("%s: %d >> %s: %d", destinationPlace.getLabel(), destinationToken, destinationPlace.getLabel(), newDestinationToken);
-			}
-			
-		}else {
-			System.out.println("Transition is not fireable");
-		}
-		
+		transitions.get(label).fire();
 	}
 
 	@Override

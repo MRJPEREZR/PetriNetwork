@@ -19,5 +19,10 @@ public class Place {
 	public void setToken(int token) {
 		this.token = token;
 	}
+	
+	@Override
+	public String toString() {
+		return "Place has " + this.token;
+	}
 
 }

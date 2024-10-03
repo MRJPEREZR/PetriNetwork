@@ -6,12 +6,12 @@ public class InArc extends Arc{
 		super();
 	};
 	
-	InArc(Place place, Transition transition){
-		super(place, transition);
+	InArc(Place place){
+		super(place);
 	};
 	
-	InArc(Place place, Transition transition, int weight){
-		super(place, transition, weight);
+	InArc(Place place, int weight){
+		super(place, weight);
 	};
 	
 	@Override

@@ -62,11 +62,49 @@ public class Transition {
 		return !outArcsStatus.contains(false);
 	}
 	
-	
-	
-	
-	
-	
-	
+	public void fire() {
+		Boolean isFireable = this.isFireable(); 
+		if (isFireable) {
+
+			Iterator<InArc> inArcsIterator = this.inArcs.iterator();
+			
+			Iterator<OutArc> outArcsIterator = this.outArcs.iterator();
+			
+			Place sourcePlace;
+			int sourceToken = 0;
+			int newSourceToken = 0;
+			
+			Place destinationPlace;
+			int destinationToken = 0;
+			int newDestinationToken = 0;
+			
+			OutArc outArc;
+			InArc inArc;
+			
+			System.out.println("Firing ...");
+			
+			while(outArcsIterator.hasNext()) {
+				outArc = outArcsIterator.next(); 
+				sourcePlace = outArc.getPlace();
+				sourceToken = sourcePlace.getToken();
+				newSourceToken = sourceToken - outArc.getWeight();
+				
+				sourcePlace.setToken(newSourceToken);
+				
+			}
+			
+			while(inArcsIterator.hasNext()) {
+				inArc = inArcsIterator.next();
+				destinationPlace = inArc.getPlace();
+				destinationToken = destinationPlace.getToken();
+				newDestinationToken = destinationToken + inArc.getWeight();
+				
+				destinationPlace.setToken(newDestinationToken);
+			}
+			
+		}else {
+			System.out.println("Transition is not fireable");
+		}
+	}
 
 }
