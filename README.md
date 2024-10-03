@@ -40,6 +40,7 @@ The UML model was created to be aligned with the following prepositions:
 
 
 ### Sequence diagram
+![Sequence Diagram](Docs/Modelling/Example.png)
 
 #### General execution
 ![Sequence Diagram](Docs/Modelling/SequenceDiagramGeneral1.png)
