@@ -1,5 +1,9 @@
 # Petri Network
 
+Group 5 members:
+* MIRANDA Anamaria.
+* PEREZ-RAMIREZ Julian.
+
 The goal to this project is to implemeted a Petri Network's UML model.
 
 The UML model was created to be aligned with the following prepositions:

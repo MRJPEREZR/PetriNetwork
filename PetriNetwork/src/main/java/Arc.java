@@ -1,4 +1,4 @@
-package com.mapd.petri;
+
 
 public abstract class Arc {
 	
