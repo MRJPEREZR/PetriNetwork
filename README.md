@@ -36,7 +36,7 @@ The UML model was created to be aligned with the following prepositions:
 ## Modelling
 
 ### Class Diagram
-![Sequence Diagram](Docs/Modelling/DiagramClass1.png)
+![Sequence Diagram](Docs/Modelling/PN_Diagram_Final.png)
 
 
 ### Sequence diagram
