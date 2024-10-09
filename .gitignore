@@ -29,7 +29,6 @@ out/
 *.ipr
 *.iws
 
-
 #Others
 /.metadata/
 .settings/
