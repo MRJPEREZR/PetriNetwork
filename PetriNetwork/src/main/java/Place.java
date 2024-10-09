@@ -1,28 +1,35 @@
-
+package main.java;
 
 public class Place {
 	
-	private int token;
+	private Integer tokens;
 	
-	Place(){
-		this.token = 0;
-	};
+	private Boolean isValidTokens(Integer tokens) {
+		return tokens >= 0;
+	}
 	
-	Place(int token){
-		this.token = token;
+	Place() {
+		this.tokens = 0;
 	}
 
-	public int getToken() {
-		return token;
+	Place(Integer tokens) {
+		 if (isValidTokens(tokens)) {
+			 this.tokens = tokens;
+		 } //TODO throw exception
 	}
 
-	public void setToken(int token) {
-		this.token = token;
+	public Integer getTokens() {
+		return tokens;
 	}
-	
+
+	public void setTokens(Integer tokens) {
+		if (isValidTokens(tokens)) {
+			 this.tokens = tokens;
+		 } //TODO throw exception
+	}
+
 	@Override
 	public String toString() {
-		return "Place has " + this.token;
+		return "Place has " + this.tokens;
 	}
-
 }

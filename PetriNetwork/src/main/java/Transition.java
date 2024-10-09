@@ -1,115 +1,69 @@
+package main.java;
 
-
-import java.util.Set;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 
 public class Transition {
-	
-	private Set<InArc> inArcs;
-	private Set<OutArc> outArcs;
-	
-	Transition(){
-		this.inArcs = new HashSet<InArc>(); 
-		this.outArcs = new HashSet<OutArc>(); 
-	};
 
-	public Set<InArc> getInArcs() {
+	private List<InArc> inArcs;
+	private List<OutArc> outArcs;
+
+	Transition() {
+		this.inArcs = new ArrayList<InArc>(); 
+		this.outArcs = new ArrayList<OutArc>(); 
+	}
+
+	private Boolean existedArc(List<? extends Arc> arcs, Arc newArc) {
+		Place place = newArc.getPlace();
+        return arcs.stream().anyMatch(arc -> arc.getPlace().equals(place));
+	}
+
+	public List<InArc> getInArcs() {
 		return inArcs;
 	}
 
-	public void setInArcs(Set<InArc> inArcs) {
-		this.inArcs = inArcs;
-	}
-
-	public Set<OutArc> getOutArcs() {
+	public List<OutArc> getOutArcs() {
 		return outArcs;
 	}
 
-	public void setOutArcs(Set<OutArc> outArcs) {
-		this.outArcs = outArcs;
-	};
-	
 	public void addInArc(InArc inArc) {
-		this.inArcs.add(inArc);
+		if (!existedArc(this.inArcs, inArc)) {
+			this.inArcs.add(inArc);
+		}
 	}
-	
+
 	public void addOutArc(OutArc outArc) {
-		this.outArcs.add(outArc);
+		if (!existedArc(this.outArcs, outArc)) {
+			this.outArcs.add(outArc);
+		}
 	}
-	
+
 	public void rmInArc(InArc inArc) {
 		this.inArcs.remove(inArc);
 	}
-	
+
 	public void rmOutArc(OutArc outArc) {
 		this.outArcs.remove(outArc);
 	}
-	
-	public Boolean isFireable() {
-		
-		Boolean fireable = false;
-		Iterator<OutArc> outArcsIterator = outArcs.iterator();
-		List<Boolean> outArcsStatus = new ArrayList<Boolean>();
-		
-		while(outArcsIterator.hasNext()) {
-			fireable = outArcsIterator.next().isFireable();
-			outArcsStatus.add(fireable);
-		}
-		
-		return !outArcsStatus.contains(false);
-	}
-	
-	public void fire() {
-		Boolean isFireable = this.isFireable(); 
-		if (isFireable) {
 
-			Iterator<InArc> inArcsIterator = this.inArcs.iterator();
-			
-			Iterator<OutArc> outArcsIterator = this.outArcs.iterator();
-			
-			Place sourcePlace;
-			int sourceToken = 0;
-			int newSourceToken = 0;
-			
-			Place destinationPlace;
-			int destinationToken = 0;
-			int newDestinationToken = 0;
-			
-			OutArc outArc;
-			InArc inArc;
-			
+	public Boolean isFireable() {
+        return outArcs.stream().anyMatch(arc -> arc.getIsActive());
+    }
+
+	public void fire() {
+		if (isFireable()) {
 			System.out.println("Firing ...");
-			
-			while(outArcsIterator.hasNext()) {
-				outArc = outArcsIterator.next(); 
-				sourcePlace = outArc.getPlace();
-				sourceToken = sourcePlace.getToken();
-				newSourceToken = sourceToken - outArc.getWeight();
-				
-				sourcePlace.setToken(newSourceToken);
-				
-			}
-			
-			while(inArcsIterator.hasNext()) {
-				inArc = inArcsIterator.next();
-				destinationPlace = inArc.getPlace();
-				destinationToken = destinationPlace.getToken();
-				newDestinationToken = destinationToken + inArc.getWeight();
-				
-				destinationPlace.setToken(newDestinationToken);
-			} 
-			
-		}else {
+			outArcs.stream().forEach(OutArc::modifyTokens);
+			outArcs.stream().forEach(OutArc::setIsActive);
+			inArcs.stream().forEach(InArc::modifyTokens);
+		} else {
 			System.out.println("Transition is not fireable");
 		}
 	}
 
 	@Override
 	public String toString () {
-		return "" + this.getInArcs();
+		return "In arcs" + this.getInArcs() + "Out arcs" + this.getOutArcs();
 	}
 
 }

@@ -1,4 +1,4 @@
-
+package main.java;
 
 import java.util.HashMap;
 import java.util.List;
@@ -6,48 +6,41 @@ import java.util.List;
 public class Dashboard {
 	
 	public static void main (String[] args) {
-		
+
 		PetriNetwork net = new PetriNetwork();
 		List<String> fireableTransitions;
-		
+
 		net.addPlace("p1");
-		net.setPlaceToken("p1", 1);
+		net.setPlaceTokens("p1", 1);
 		
-		net.addPlace("p2");
-		net.setPlaceToken("p2", 3);
-		
+		net.addPlace("p2", 3);
+
 		net.addPlace("p3");
 		
 		net.addPlace("p4");
-		net.setPlaceToken("p4", 1);
+		net.setPlaceTokens("p4", 1);
 		
 		net.addTransition("t1");
 		
-		net.addOutArc("a1", "p1", "t1");
-		
-		net.addOutArc("a2", "p2", "t1");
-		net.setArcWeight("a2", 2);
-		
-		
-		net.addInArc("a3", "p3", "t1");
+		net.addArc("a1", "t1", "p1", "out");
+
+		net.addArc("a2", "t1", "p2", "out", 2);
+
+		net.addArc("a3", "t1", "p3", "in");
 		net.setArcWeight("a3", 3);
-		
-		net.addInArc("a4", "p4", "t1");
+
+		net.addArc("a4", "t1", "p4", "in");
 		
 		fireableTransitions = net.fireableTransitions();
-		
 		System.out.println(fireableTransitions);
 		
 		HashMap<String, Place> places_before = net.getPlaces();
 		System.out.println(places_before);
-		
-		HashMap<String, Arc> arcs = net.getArcs();
-		System.out.println(arcs);
-		
-		net.fire(fireableTransitions.get(0));
-		
+		net.fire("t1");
 		HashMap<String, Place> places_after = net.getPlaces();
 		System.out.println(places_after);
+		System.out.println(net.getTransitions());
+		net.fire("t1");
 	}
 
 }

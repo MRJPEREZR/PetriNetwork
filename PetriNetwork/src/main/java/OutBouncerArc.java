@@ -1,24 +1,26 @@
+package main.java;
 
+public class OutBouncerArc extends OutArc {
 
-public class OutBouncerArc extends OutArc{
-	
-	OutBouncerArc(){
-		super();
-	};
-	
-	OutBouncerArc(Place place){
+	OutBouncerArc(Place place) {
 		super(place);
 	};
-	
-	OutBouncerArc(Place place, int weight){
+
+	OutBouncerArc(Place place, int weight) {
 		super(place, weight);
-	};
-	
-	@Override
-	public Boolean isFireable() {
-		// TO IMPLEMENTED
-		return false;
-		
 	}
-	
+
+	@Override
+	public void setIsActive() {
+		//TODO Implement
+	}
+
+	@Override
+	public void modifyTokens() {
+		Place currentPlace = this.getPlace();
+		if (this.getIsActive()) {
+			//TODO Implement
+		}
+	}
+
 }

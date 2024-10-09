@@ -1,24 +1,26 @@
+package main.java;
 
+public class OutZeroArc extends OutArc {
 
-public class OutZeroArc extends OutArc{
-	
-	OutZeroArc(){
-		super();
-	};
-	
-	OutZeroArc(Place place){
+	OutZeroArc(Place place) {
 		super(place);
-	};
-	
-	OutZeroArc(Place place, int weight){
+	}
+
+	OutZeroArc(Place place, int weight) {
 		super(place, weight);
-	};
+	}
 	
 	@Override
-	public Boolean isFireable() {
-		// TO IMPLEMENTED
-		return false;
-		
+	public void setIsActive() {
+		//TODO Implement
+	}
+
+	@Override
+	public void modifyTokens() {
+		Place currentPlace = this.getPlace();
+		if (this.getIsActive()) {
+			//TODO Implement
+		}
 	}
 
 }
