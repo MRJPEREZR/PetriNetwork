@@ -1,4 +1,4 @@
-package com.mapd.petri;
+
 
 public class OutArc extends Arc {
 	
