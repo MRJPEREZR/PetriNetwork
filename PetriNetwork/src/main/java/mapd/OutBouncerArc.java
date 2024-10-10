@@ -1,15 +1,15 @@
-package main.java;
+package mapd;
 
-public class OutZeroArc extends OutArc {
+public class OutBouncerArc extends OutArc {
 
-	OutZeroArc(Place place) {
+	OutBouncerArc(Place place) {
 		super(place);
-	}
+	};
 
-	OutZeroArc(Place place, int weight) {
+	OutBouncerArc(Place place, int weight) {
 		super(place, weight);
 	}
-	
+
 	@Override
 	public void setIsActive() {
 		//TODO Implement

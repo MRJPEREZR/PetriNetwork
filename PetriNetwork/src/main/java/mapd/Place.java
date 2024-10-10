@@ -1,4 +1,4 @@
-package main.java;
+package mapd;
 
 public class Place {
 	

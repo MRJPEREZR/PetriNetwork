@@ -1,4 +1,4 @@
-package main.java;
+package mapd;
 
 import java.util.HashMap;
 import java.util.List;

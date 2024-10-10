@@ -1,4 +1,4 @@
-package main.java;
+package mapd;
 
 import java.util.ArrayList;
 import java.util.List;
