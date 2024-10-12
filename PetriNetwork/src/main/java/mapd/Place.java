@@ -1,5 +1,7 @@
 package mapd;
 
+import exceptions.InvalidTokenNumber;
+
 public class Place {
 	
 	private Integer tokens;
@@ -12,20 +14,24 @@ public class Place {
 		this.tokens = 0;
 	}
 
-	Place(Integer tokens) {
+	Place(Integer tokens) throws InvalidTokenNumber {
 		 if (isValidTokens(tokens)) {
 			 this.tokens = tokens;
-		 } //TODO throw exception
+		 } else {
+			 throw new InvalidTokenNumber("Invalid token < 0");
+		 }
 	}
 
 	public Integer getTokens() {
 		return tokens;
 	}
 
-	public void setTokens(Integer tokens) {
+	public void setTokens(Integer tokens) throws InvalidTokenNumber {
 		if (isValidTokens(tokens)) {
 			 this.tokens = tokens;
-		 } //TODO throw exception
+		 }else {
+			 throw new InvalidTokenNumber("Invalid token < 0");
+		 }
 	}
 
 	@Override

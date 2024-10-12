@@ -1,17 +1,20 @@
 package mapd;
 
+import exceptions.InvalidTokenNumber;
+import exceptions.InvalidWeightNumber;
+
 public class InArc extends Arc {
 
 	InArc(Place place) {
 		super(place);
 	}
 
-	InArc(Place place, int weight) {
+	InArc(Place place, int weight) throws InvalidWeightNumber {
 		super(place, weight);
 	}
 
 	@Override
-	public void modifyTokens() {
+	public void modifyTokens() throws InvalidTokenNumber {
 		Place currentPlace = this.getPlace();
 		currentPlace.setTokens(currentPlace.getTokens() + this.getWeight());
 	}

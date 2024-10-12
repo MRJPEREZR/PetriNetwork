@@ -1,18 +1,29 @@
 package mapd;
 
+import exceptions.InvalidTokenNumber;
+import exceptions.InvalidWeightNumber;
+
 public abstract class Arc {
 
 	private Place place;
 	private int weight;
+	
+	private Boolean isValidWeight(Integer weight) {
+		return weight >= 1;
+	}
 
 	Arc(Place place) {
 		this.place = place;
 		this.weight = 1;
 	}
 
-	Arc(Place place, int weight) {
+	Arc(Place place, int weight) throws InvalidWeightNumber {
 		this.place = place;
-		this.weight = weight;
+		if (isValidWeight(weight)) {
+			this.weight = weight;
+		}else {
+			throw new InvalidWeightNumber("Invalid weight < 1");
+		}
 	}
 
 	public Place getPlace() {
@@ -27,11 +38,15 @@ public abstract class Arc {
 		return weight;
 	}
 
-	public void setWeight(int weight) {
-		this.weight = weight;
+	public void setWeight(int weight) throws InvalidWeightNumber {
+		if (isValidWeight(weight)) {
+			this.weight = weight;
+		}else {
+			throw new InvalidWeightNumber("Invalid weight < 1");
+		}
 	}
 
-	public abstract void modifyTokens();
+	public abstract void modifyTokens() throws InvalidTokenNumber;
 	public abstract void addToTransition(Transition transition);
 
 }

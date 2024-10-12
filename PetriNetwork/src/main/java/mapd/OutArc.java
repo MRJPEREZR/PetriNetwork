@@ -1,15 +1,18 @@
 package mapd;
 
+import exceptions.InvalidTokenNumber;
+import exceptions.InvalidWeightNumber;
+
 public class OutArc extends Arc {
 
-	private Boolean isActive;
+	protected Boolean isActive;
 
 	OutArc(Place place) {
 		super(place);
 		setIsActive();
 	}
 	
-	OutArc(Place place, int weight) {
+	OutArc(Place place, int weight) throws InvalidWeightNumber {
 		super(place, weight);
 		setIsActive();
 	}
@@ -23,7 +26,7 @@ public class OutArc extends Arc {
 	}
 
 	@Override
-	public void modifyTokens() {
+	public void modifyTokens() throws InvalidTokenNumber {
 		Place currentPlace = this.getPlace();
 		if (isActive) {
 			currentPlace.setTokens(currentPlace.getTokens() - this.getWeight());
@@ -37,7 +40,7 @@ public class OutArc extends Arc {
 	
 	@Override
 	public String toString() {
-		return "Arc has weight " + this.getWeight() + "and it is " + this.getIsActive();
+		return "Arc has weight " + this.getWeight() + " and it is " + this.getIsActive();
 	}
 
 }

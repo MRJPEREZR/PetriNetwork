@@ -3,6 +3,8 @@ package mapd;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.InvalidTokenNumber;
+
 public class Transition {
 
 	private List<InArc> inArcs;
@@ -53,9 +55,23 @@ public class Transition {
 	public void fire() {
 		if (isFireable()) {
 			System.out.println("Firing ...");
-			outArcs.stream().forEach(OutArc::modifyTokens);
+			outArcs.stream().forEach(arg0 -> {
+				try {
+					arg0.modifyTokens();
+				} catch (InvalidTokenNumber e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 			outArcs.stream().forEach(OutArc::setIsActive);
-			inArcs.stream().forEach(InArc::modifyTokens);
+			inArcs.stream().forEach(arg0 -> {
+				try {
+					arg0.modifyTokens();
+				} catch (InvalidTokenNumber e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
 		} else {
 			System.out.println("Transition is not fireable");
 		}
@@ -63,7 +79,7 @@ public class Transition {
 
 	@Override
 	public String toString () {
-		return "In arcs" + this.getInArcs() + "Out arcs" + this.getOutArcs();
+		return "InArcs" + this.getInArcs() + "OutArcs" + this.getOutArcs();
 	}
 
 }
