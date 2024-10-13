@@ -53,15 +53,16 @@ public class Dashboard {
 			net.renameArc("a1.1", "arcInverted"); // to test renaming
 			net.renamePlace("p1", "place1");
 			net.renameTransition("t2", "newTransition");
-			
+		
 			net.showAllElements();
+			System.out.println(net.getRecords());
 			
 			//net.setPlaceTokens("place1", -1);
 			//net.setArcWeight("arcInverted", 0);
 			// net.addPlace("p2");
-			net.addArc("errorArc1", "t1", "p2", "out", 2);
-			net.addArc("errorArc", "t1", "p2", "out", 3);
-			
+			//net.addArc("errorArc1", "t1", "p2", "out", 2);
+			//net.addArc("errorArc", "t1", "p2", "out", 3);
+			// net.addArc("errorArc", "t1", "p2", "outA", 3);
 		}catch(Exception error) {
 			System.out.println("Error: " + error.getMessage());
 		}

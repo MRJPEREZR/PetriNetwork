@@ -5,10 +5,12 @@ import interfaces.IPetriNetwork;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import exceptions.ElementNameNotExists;
 import exceptions.InvalidTokenNumber;
 import exceptions.InvalidWeightNumber;
 import exceptions.RepeatedArc;
@@ -208,7 +210,7 @@ public class PetriNetwork implements IPetriNetwork {
             case "outbouncer":
                 return new OutBouncerArc(place, weight);
             default:
-            	throw new IllegalArgumentException("No valid" + type + "arc type");
+            	throw new IllegalArgumentException("No valid " + type + " arc type");
         }
     }
 	
@@ -302,16 +304,20 @@ public class PetriNetwork implements IPetriNetwork {
 				Arc newArc = createArc("out", place, weight);
 				newArc.addToTransition(involvedTransition);
 				this.arcs.put(label, newArc);
+				// update record
+				updateArcDirectionInRecord(labelTransition, labelPlace, "out");
 			}else {
 				throw new RepeatedArc("An Arc in the same direction already exists");
 			}
 		}else if (oldArc instanceof OutArc || oldArc instanceof OutZeroArc || oldArc instanceof OutBouncerArc) {
+			type = "out";
 			if (! isArcRepeated(labelTransition, labelPlace, type)) {
-				type = "out";
 				involvedTransition.getInArcs().remove(oldArc);
 				Arc newArc = createArc("in", place, weight);
 				newArc.addToTransition(involvedTransition);
 				this.arcs.put(label, newArc);
+				// update record
+				updateArcDirectionInRecord(labelTransition, labelPlace, "in");
 			}else {
 				throw new RepeatedArc("An Arc in the same direction already exists");
 			}
@@ -450,16 +456,24 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @param oldName The current name of the Place to be renamed.
 	 * @param newName The new name to assign to the Place. 
 	 * @throws RepeatedNameElement 
+	 * @throws ElementNameNotExists 
 	 * @throws IllegalArgumentException If a Place with the new name already exists in the network.
 	 */
 	@Override
-	public void renamePlace(String oldName, String newName) throws RepeatedNameElement {
-		Place place = places.get(oldName);
-		places.remove(oldName);
-		if (!arcs.containsKey(newName)) {
-			places.put(newName, place);
+	public void renamePlace(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
+		if(places.containsKey(oldName)) {
+			Place place = places.get(oldName);
+			places.remove(oldName);
+			if (!arcs.containsKey(newName)) {
+				places.put(newName, place);
+				// update record of new place name
+				updateNameInRecords(oldName, newName, "place");
+				
+			}else {
+				throw new RepeatedNameElement("New name already exists");
+			}
 		}else {
-			throw new RepeatedNameElement("New name already exists");
+			throw new ElementNameNotExists("Element with name" + oldName + "does not exist");
 		}
 	}
 	
@@ -473,16 +487,23 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @param oldName The current name of the Transition to be renamed.
 	 * @param newName The new name to assign to the Transition.
 	 * @throws RepeatedNameElement 
+	 * @throws ElementNameNotExists 
 	 * @throws IllegalArgumentException If a Transition with the new name already exists in the network.
 	 */
 	@Override
-	public void renameTransition(String oldName, String newName) throws RepeatedNameElement {
-		Transition transition = transitions.get(oldName);
-		transitions.remove(oldName);
-		if (!arcs.containsKey(newName)) {
-			transitions.put(newName, transition);
+	public void renameTransition(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
+		if (transitions.containsKey(oldName)) {
+			Transition transition = transitions.get(oldName);
+			transitions.remove(oldName);
+			if (!arcs.containsKey(newName)) {
+				transitions.put(newName, transition);
+				// update record of transition name
+				updateNameInRecords(oldName, newName, "transition");
+			}else {
+				throw new RepeatedNameElement("New name already exists");
+			}
 		}else {
-			throw new RepeatedNameElement("New name already exists");
+			throw new ElementNameNotExists("Element with name" + oldName + "does not exist");
 		}
 	}
 	
@@ -496,16 +517,21 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @param oldName The current name of the Arc to be renamed.
 	 * @param newName The new name to assign to the Arc.
 	 * @throws RepeatedNameElement 
+	 * @throws ElementNameNotExists 
 	 * @throws IllegalArgumentException If an Arc with the new name already exists in the network.
 	 */
 	@Override
-	public void renameArc(String oldName, String newName) throws RepeatedNameElement {
-		Arc arc = arcs.get(oldName);
-		arcs.remove(oldName);
-		if (!arcs.containsKey(newName)) {
-			arcs.put(newName, arc);
+	public void renameArc(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
+		if (arcs.containsKey(oldName)) {
+			Arc arc = arcs.get(oldName);
+			arcs.remove(oldName);
+			if (!arcs.containsKey(newName)) {
+				arcs.put(newName, arc);
+			}else {
+				throw new RepeatedNameElement("New name already exists");
+			}
 		}else {
-			throw new RepeatedNameElement("New name already exists");
+			throw new ElementNameNotExists("Element with name" + oldName + "does not exist");
 		}
 	}
 	
@@ -524,5 +550,52 @@ public class PetriNetwork implements IPetriNetwork {
 	private Boolean isArcRepeated(String transition, String place, String type) {
 		List<String> arcRecord = Arrays.asList(transition, place, type);
 		return records.contains(arcRecord);
+	}
+	
+	/**
+	 * Updates the name in the records for either "place" or "transition" based on the given type.
+	 * The method iterates through the records and replaces the `oldName` with the `newName`
+	 * in the appropriate index of each list, determined by the type.
+	 *
+	 * @param oldName the original name to be updated in the records
+	 * @param newName the new name to replace the old name in the records
+	 * @param type    specifies the type of the record, either "place" or "transition".
+	 *                If the type is "place", the name is updated at index 1 of the list.
+	 *                If the type is "transition", the name is updated at index 0 of the list.
+	 */
+	private void updateNameInRecords (String oldName, String newName, String type) {
+		Iterator <List<String>> iterator = this.records.iterator();
+		int index = 0;
+		if (type.equals("place")) {
+			index = 1;
+		}else if(type.equals("transition")) {
+			index = 0;
+		}
+		while(iterator.hasNext()) {
+			List<String> list = iterator.next();
+			if (list.contains(oldName)) {
+				list.set(index, newName);
+			}
+		}
+	}
+	
+	/**
+	 * Updates the direction of an arc between a specified transition and place in the records.
+	 * The method iterates through the records and replaces the arc direction with the given 
+	 * `newDirection` for the matching transition and place.
+	 *
+	 * @param transition   the name of the transition involved in the arc
+	 * @param place        the name of the place involved in the arc
+	 * @param newDirection the new direction to set for the arc between the transition and place.
+	 *                     This value will replace the element at index 2 in the matching record.
+	 */
+	private void updateArcDirectionInRecord (String transition, String place, String newDirection) {
+		Iterator <List<String>> iterator = this.records.iterator();
+		while(iterator.hasNext()) {
+			List<String> list = iterator.next();
+			if (list.contains(transition) && list.contains(place)) {
+				list.set(2, newDirection);
+			}
+		}
 	}
 }

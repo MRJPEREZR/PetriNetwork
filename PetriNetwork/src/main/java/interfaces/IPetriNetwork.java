@@ -2,6 +2,7 @@ package interfaces;
 
 import java.util.List;
 
+import exceptions.ElementNameNotExists;
 import exceptions.InvalidTokenNumber;
 import exceptions.InvalidWeightNumber;
 import exceptions.RepeatedArc;
@@ -14,12 +15,12 @@ public interface IPetriNetwork {
 	public void rmPlace(String label);
 	public void setPlaceTokens(String label, Integer tokens) throws InvalidTokenNumber;
 	public void showPlaces();
-	public void renamePlace(String oldName, String newName) throws RepeatedNameElement;
+	public void renamePlace(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists;
 	
 	public void addTransition(String label) throws RepeatedNameElement;
 	public void rmTransition(String label);
 	public void showTransitions();
-	public void renameTransition(String oldName, String newName) throws RepeatedNameElement;
+	public void renameTransition(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists;
 
 	public void addArc(String label, String transition, String place, String type) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc;
 	public void addArc(String label, String transition, String place, String type, Integer weight) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc;
@@ -27,7 +28,7 @@ public interface IPetriNetwork {
 	public void setArcWeight(String label, Integer weight) throws InvalidWeightNumber;
 	public void rmArc(String label);
 	public void showArcs();
-	public void renameArc(String oldName, String newName) throws RepeatedNameElement;
+	public void renameArc(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists;
 
 	public void fire(String label);
 	public List<String> fireableTransitions();
