@@ -1,7 +1,7 @@
-package mapd;
+package mapd.implementations;
 
-import exceptions.InvalidTokenNumber;
-import exceptions.InvalidWeightNumber;
+import mapd.exceptions.InvalidTokenNumber;
+import mapd.exceptions.InvalidWeightNumber;
 
 public class OutBouncerArc extends OutArc {
 

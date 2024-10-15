@@ -1,6 +1,6 @@
-package mapd;
+package mapd.implementations;
 
-import interfaces.IPetriNetwork;
+import mapd.interfaces.IPetriNetwork;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import exceptions.ElementNameNotExists;
-import exceptions.InvalidTokenNumber;
-import exceptions.InvalidWeightNumber;
-import exceptions.RepeatedArc;
-import exceptions.RepeatedNameElement;
+import mapd.exceptions.ElementNameNotExists;
+import mapd.exceptions.InvalidTokenNumber;
+import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.RepeatedArc;
+import mapd.exceptions.RepeatedNameElement;
 
 public class PetriNetwork implements IPetriNetwork {
 

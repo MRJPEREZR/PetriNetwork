@@ -1,9 +1,9 @@
-package mapd;
+package mapd.implementations;
+
+import mapd.exceptions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import exceptions.InvalidTokenNumber;
 
 public class Transition {
 

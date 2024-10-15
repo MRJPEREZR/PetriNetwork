@@ -1,4 +1,4 @@
-package mapd;
+package mapd.implementations;
 
 import java.util.List;
 

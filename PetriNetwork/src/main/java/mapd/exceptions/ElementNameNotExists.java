@@ -1,4 +1,4 @@
-package exceptions;
+package mapd.exceptions;
 
 public class ElementNameNotExists extends Exception {
 	public ElementNameNotExists(String errorMessage) {

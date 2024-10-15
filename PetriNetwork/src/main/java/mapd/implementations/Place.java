@@ -1,6 +1,6 @@
-package mapd;
+package mapd.implementations;
 
-import exceptions.InvalidTokenNumber;
+import mapd.exceptions.*;
 
 public class Place {
 	

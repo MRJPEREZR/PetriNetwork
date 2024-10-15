@@ -1,17 +1,13 @@
-package interfaces;
+package mapd.interfaces;
+
+import mapd.exceptions.*;
 
 import java.util.List;
-
-import exceptions.ElementNameNotExists;
-import exceptions.InvalidTokenNumber;
-import exceptions.InvalidWeightNumber;
-import exceptions.RepeatedArc;
-import exceptions.RepeatedNameElement;
 
 public interface IPetriNetwork {
 
 	public void addPlace(String label) throws RepeatedNameElement;
-	public void addPlace(String label, Integer tokens) throws InvalidTokenNumber, RepeatedNameElement;
+	public void addPlace(String label, Integer tokens) throws InvalidTokenNumber, RepeatedNameElement, InvalidTokenNumber, mapd.exceptions.RepeatedNameElement;
 	public void rmPlace(String label);
 	public void setPlaceTokens(String label, Integer tokens) throws InvalidTokenNumber;
 	public void showPlaces();
