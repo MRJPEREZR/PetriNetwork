@@ -36,7 +36,7 @@ public class PetriNetwork implements IPetriNetwork {
 	 * </ul>
 	 */
 	PetriNetwork() {
-		this.places = new HashMap<String, Place>(); 
+		this.places = new HashMap<String, Place>();
 		this.transitions = new HashMap<String, Transition>();
 		this.arcs = new HashMap<String, Arc>();
 		this.records = new ArrayList<List<String>>();
@@ -58,16 +58,28 @@ public class PetriNetwork implements IPetriNetwork {
 		return records;
 	}
 	
-	public Place getPlace(String label) {
-		return places.get(label);
+	public Place getPlace(String label) throws ElementNameNotExists {
+		if (this.places.containsKey(label)) {
+			return this.places.get(label);
+		}else {
+			throw new ElementNameNotExists("A place with this name does not exist");
+		}
 	}
 
-	public Transition getTransition(String label) {
-		return transitions.get(label);
+	public Transition getTransition(String label) throws ElementNameNotExists {
+		if (!this.transitions.containsKey(label)) {
+			throw new ElementNameNotExists("A place with this name does not exist");
+		}else {
+			return this.transitions.get(label);
+		}
 	}
 
-	public Arc getArc(String label) {
-		return arcs.get(label);
+	public Arc getArc(String label) throws ElementNameNotExists {
+		if (!this.arcs.containsKey(label)) {
+			throw new ElementNameNotExists("A place with this name does not exist");
+		}else {
+			return this.arcs.get(label);
+		}
 	}
 
 	public void setRecords(List<List<String>> records) {
@@ -126,12 +138,18 @@ public class PetriNetwork implements IPetriNetwork {
 	 * 
 	 * @param label  The unique identifier for the Place to be added.
 	 * @param tokens The initial number of tokens in the Place. Must be a valid non-negative integer.
+	 * @throws ElementNameNotExists 
 	 * @throws InvalidTokenNumber If the provided number of tokens is invalid (e.g., negative).
 	 * @throws RepeatedNameElement If a Place with the specified label already exists in the network.
 	 */
 	@Override
-	public void rmPlace(String label) {
-		this.places.remove(label);
+	public void rmPlace(String label) throws ElementNameNotExists {
+		if (this.places.containsKey(label)) {
+			this.places.remove(label);
+		}else {
+			throw new ElementNameNotExists(label);
+		}
+		
 	}
 
 	/**
@@ -144,10 +162,11 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @param label  The unique identifier of the Place whose token count is to be updated.
 	 * @param tokens The new token count for the Place. Must be a valid non-negative integer.
 	 * @throws InvalidTokenNumber If the provided number of tokens is invalid (e.g., negative).
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void setPlaceTokens(String label, Integer tokens) throws InvalidTokenNumber {
-		places.get(label).setTokens(tokens);
+	public void setPlaceTokens(String label, Integer tokens) throws InvalidTokenNumber, ElementNameNotExists {
+		getPlace(label).setTokens(tokens);
 	}
 	
 	
@@ -178,10 +197,15 @@ public class PetriNetwork implements IPetriNetwork {
 	 * If the label does not exist, no action is taken.
 	 * 
 	 * @param label The unique identifier of the Transition to be removed.
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void rmTransition(String label) {
-		this.transitions.remove(label);
+	public void rmTransition(String label) throws ElementNameNotExists {
+		if (this.places.containsKey(label) ) {
+			this.transitions.remove(label);
+		}else {
+			throw new ElementNameNotExists(label);
+		}
 	}
 	
 	/**
@@ -231,13 +255,14 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @throws InvalidWeightNumber If the provided weight is invalid (e.g., negative).
 	 * @throws RepeatedNameElement If an Arc with the same label already exists in the network.
 	 * @throws RepeatedArc         If an Arc with the same transition, place, and type already exists.
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void addArc(String label, String transitionLabel, String placeLabel, String type, Integer weight) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc {
+	public void addArc(String label, String transitionLabel, String placeLabel, String type, Integer weight) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc, ElementNameNotExists {
 		if (! this.arcs.containsKey(label)) {
 			if (!this.isArcRepeated(transitionLabel, placeLabel, type)) {
-				Place place = places.get(placeLabel);
-				Transition transition = transitions.get(transitionLabel);
+				Place place = getPlace(placeLabel);
+				Transition transition = getTransition(transitionLabel);
 				Arc arc = createArc(type, place, weight);
 		        arc.addToTransition(transition);
 		        this.arcs.put(label, arc);
@@ -253,11 +278,11 @@ public class PetriNetwork implements IPetriNetwork {
 	
 	
 	@Override
-	public void addArc(String label, String transitionLabel, String placeLabel, String type) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc {
+	public void addArc(String label, String transitionLabel, String placeLabel, String type) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc, ElementNameNotExists {
 		if ( !this.arcs.containsKey(label)) {
 			if (!this.isArcRepeated(transitionLabel, placeLabel, type)) {
-				Place place = places.get(placeLabel);
-				Transition transition = transitions.get(transitionLabel);
+				Place place = getPlace(placeLabel);
+				Transition transition = getTransition(transitionLabel);
 				Arc arc = createArc(type, place, null);
 		        arc.addToTransition(transition);
 		        this.arcs.put(label, arc);
@@ -287,10 +312,11 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @throws InvalidWeightNumber If the provided weight is invalid (handled by the default weight).
 	 * @throws RepeatedNameElement If an Arc with the same label already exists in the network.
 	 * @throws RepeatedArc         If an Arc with the same transition, place, and type already exists.
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void editArcDirection(String label, String labelTransition, String labelPlace) throws InvalidWeightNumber, RepeatedArc {
-		Arc oldArc = arcs.get(label);
+	public void editArcDirection(String label, String labelTransition, String labelPlace) throws InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
+		Arc oldArc = getArc(label);
 		Integer weight = oldArc.getWeight();
 		Place place = oldArc.getPlace();
 		
@@ -333,10 +359,11 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @param label  The unique identifier of the Arc whose weight is to be updated.
 	 * @param weight The new weight for the Arc. Must be a valid non-negative integer.
 	 * @throws InvalidWeightNumber If the provided weight is invalid (e.g., negative).
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void setArcWeight(String label, Integer weight) throws InvalidWeightNumber {
-		this.arcs.get(label).setWeight(weight);
+	public void setArcWeight(String label, Integer weight) throws InvalidWeightNumber, ElementNameNotExists {
+		getArc(label).setWeight(weight);
 	}
 	
 	/**
@@ -346,10 +373,16 @@ public class PetriNetwork implements IPetriNetwork {
 	 * If the label does not exist, no action is taken.
 	 * 
 	 * @param label The unique identifier of the Arc to be removed.
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void rmArc(String label) {
-		arcs.remove(label);
+	public void rmArc(String label) throws ElementNameNotExists {
+		if (arcs.containsKey(label)) {
+			arcs.remove(label);
+		}else {
+			throw new ElementNameNotExists(label);
+		}
+		
 	}
 	
 	/**
@@ -381,13 +414,16 @@ public class PetriNetwork implements IPetriNetwork {
 	 * for debugging purposes.
 	 * 
 	 * @param label The unique identifier of the transition to be fired.
+	 * @throws ElementNameNotExists 
 	 */
 	@Override
-	public void fire(String label) {
+	public void fire(String label) throws ElementNameNotExists {
+		System.out.println("Firing Transition " + label);
+
 		System.out.println("Before fire transition");
 		showPlaces();
 		
-		transitions.get(label).fire();
+		getTransition(label).fire();
 		
 		System.out.println("After fire transition");
 		showPlaces();
