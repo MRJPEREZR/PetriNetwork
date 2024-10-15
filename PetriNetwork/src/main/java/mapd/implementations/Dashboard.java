@@ -23,7 +23,7 @@ public class Dashboard {
 			net.addArc("a3", "t1", "p3", "in", 3);
 			net.addArc("a4", "t1", "p4", "in"); // by default weight is 1
 			
-			
+			/*
 			//Second Transition
 			net.addPlace("p1.1", 0);
 			net.addPlace("p2.1", 10);
@@ -33,29 +33,29 @@ public class Dashboard {
 			net.addArc("a1.1", "t2", "p1.1", "outzero");
 			net.addArc("a2.1", "t2", "p2.1", "outBouncer");
 			net.addArc("a3.1", "t2", "p3", "in");
-			
+			*/
 			
 			net.showAllElements();
 			
 			fireableTransitions = net.fireableTransitions();
 			net.fire(fireableTransitions.get(0)); // t1
 			
-			fireableTransitions = net.fireableTransitions();
-			net.fire(fireableTransitions.get(0)); // t2
+			//fireableTransitions = net.fireableTransitions();
+			//net.fire(fireableTransitions.get(0)); // t2
 			
 			
 			// Edit Arc Direction to give 1 token to p1.1 which initially was created without any token
-			net.editArcDirection("a1.1", "t2", "p1.1");
+			//net.editArcDirection("a1.1", "t2", "p1.1");
 			
-			fireableTransitions = net.fireableTransitions();
-			net.fire(fireableTransitions.get(0));// t2
+			//fireableTransitions = net.fireableTransitions();
+			//net.fire(fireableTransitions.get(0));// t2
 			
-			net.renameArc("a1.1", "arcInverted"); // to test renaming
-			net.renamePlace("p1", "place1");
-			net.renameTransition("t2", "newTransition");
+			//net.renameArc("a1.1", "arcInverted"); // to test renaming
+			//net.renamePlace("p1", "place1");
+			//net.renameTransition("t2", "newTransition");
 		
-			net.showAllElements();
-			System.out.println(net.getRecords());
+			//net.showAllElements();
+			//System.out.println(net.getRecords());
 			
 			//net.setPlaceTokens("place1", -1);
 			//net.setArcWeight("arcInverted", 0);

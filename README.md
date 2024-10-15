@@ -79,7 +79,21 @@ This code fires the transition `t1` because of the `out arcs` meet the condition
 |p3|0|3|
 |p4|1|2|
 
-
+The execution gives the following output in the console:
+```
+Places:
+{p1=Place has 1, p2=Place has 3, p3=Place has 0, p4=Place has 1}
+Transitions:
+{t1=InArcs[Arc has weight 3, Arc has weight 1]OutArcs[Arc has weight 1 and it is true, Arc has weight 2 and it is true]}
+Arcs:
+{a1=Arc has weight 1 and it is true, a2=Arc has weight 2 and it is true, a3=Arc has weight 3, a4=Arc has weight 1}
+[t1]
+Before fire transition
+{p1=Place has 1, p2=Place has 3, p3=Place has 0, p4=Place has 1}
+Firing ...
+After fire transition
+{p1=Place has 0, p2=Place has 1, p3=Place has 3, p4=Place has 2}
+```
 
 
 
