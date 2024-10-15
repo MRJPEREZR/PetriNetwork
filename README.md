@@ -42,21 +42,44 @@ The UML model was created to be aligned with the following prepositions:
 ### Class Diagram
 ![Sequence Diagram](Docs/Modelling/PN_Diagram_Final.png)
 
+### How to run
 
-### Sequence diagram
-![Sequence Diagram](Docs/Modelling/Example.png)
+In the `Dashboard.java` file you can find the main function to execute the program. There is a Petri Network already created to emulated the behavior of the following example:
+![PetriNetworkExample](Docs/Example.png)
 
-#### General execution
-![Sequence Diagram](Docs/Modelling/FinalSequenceDiagramGeneral.png)
+The code to describe this network is:
+```
+PetriNetwork net = new PetriNetwork();
+List<String> fireableTransitions;
+			
+//First Transition
+net.addPlace("p1", 1);
+net.addPlace("p2", 3);
+net.addPlace("p3");// by default token is 0
+net.addPlace("p4", 1);
+			
+net.addTransition("t1");
+			
+net.addArc("a1", "t1", "p1", "out");
+net.addArc("a2", "t1", "p2", "out", 2);
+net.addArc("a3", "t1", "p3", "in", 3);
+net.addArc("a4", "t1", "p4", "in"); // by default weight is 1
 
-#### Fire()
-![Sequence Diagram](Docs/Modelling/SequenceDiagramFire1.png)
+net.showAllElements();
+List<String> fireableTransitions = net.fireableTransitions();
+net.fire(fireableTransitions.get(0)); // t1
+```
 
-#### isTransitionFireable()
-![Sequence Diagram](Docs/Modelling/isTransitionFireable.png)
+This code fires the transition `t1` because of the `out arcs` meet the condition to be "fireable". For that, the place's token are updated as following:
 
-### OutArcIsFireable()
-![Sequence Diagram](Docs/Modelling/OutArcIsFireableSequenceDiagram.png)
+|Place|Before|After|
+|------|-----|-----|
+|p1|1|0|
+|p2|3|1|
+|p3|0|3|
+|p4|1|2|
+
+
 
 
 
