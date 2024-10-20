@@ -21,7 +21,7 @@ public abstract class Arc {
 		this.place = place;
 		if (isValidWeight(weight)) {
 			this.weight = weight;
-		}else {
+		} else {
 			throw new InvalidWeightNumber("Invalid weight < 1");
 		}
 	}
@@ -41,7 +41,7 @@ public abstract class Arc {
 	public void setWeight(int weight) throws InvalidWeightNumber {
 		if (isValidWeight(weight)) {
 			this.weight = weight;
-		}else {
+		} else {
 			throw new InvalidWeightNumber("Invalid weight < 1");
 		}
 	}

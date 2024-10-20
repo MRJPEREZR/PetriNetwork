@@ -21,10 +21,6 @@ public class OutZeroArc extends OutArc {
 
 	@Override
 	public void modifyTokens() throws InvalidTokenNumber {
-		Place currentPlace = this.getPlace();
-		if (this.getIsActive()) {
-			currentPlace.setTokens(0);
-		}
 	}
 
 }

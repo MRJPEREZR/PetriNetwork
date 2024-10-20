@@ -30,6 +30,7 @@ public class OutArc extends Arc {
 		Place currentPlace = this.getPlace();
 		if (isActive) {
 			currentPlace.setTokens(currentPlace.getTokens() - this.getWeight());
+			this.setIsActive();
 		}
 	}
 	

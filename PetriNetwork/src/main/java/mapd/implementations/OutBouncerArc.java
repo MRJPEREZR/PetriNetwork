@@ -7,10 +7,12 @@ public class OutBouncerArc extends OutArc {
 
 	OutBouncerArc(Place place) {
 		super(place);
+		this.setIsActive();
 	};
 
 	OutBouncerArc(Place place, int weight) throws InvalidWeightNumber {
 		super(place, weight);
+		this.setIsActive();
 	}
 	
 	@Override
@@ -25,6 +27,7 @@ public class OutBouncerArc extends OutArc {
 		Place currentPlace = this.getPlace();
 		if (this.getIsActive()) {
 			currentPlace.setTokens(0);
+			this.setIsActive();
 		}
 	}
 
