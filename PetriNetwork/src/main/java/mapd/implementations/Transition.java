@@ -9,15 +9,25 @@ public class Transition {
 
 	private List<InArc> inArcs;
 	private List<OutArc> outArcs;
+	private String label;
 
-	Transition() {
+	Transition(String label) {
 		this.inArcs = new ArrayList<InArc>(); 
-		this.outArcs = new ArrayList<OutArc>(); 
+		this.outArcs = new ArrayList<OutArc>();
+		this.label = label;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
+	}
+
+	public String getLabel() {
+		return label;
 	}
 
 	private Boolean existedArc(List<? extends Arc> arcs, Arc newArc) {
 		Place place = newArc.getPlace();
-        return arcs.stream().anyMatch(arc -> arc.getPlace().equals(place));
+        return arcs.stream().anyMatch(arc -> arc.getPlace().getLabel().equals(place.getLabel()));
 	}
 
 	public List<InArc> getInArcs() {
@@ -28,15 +38,19 @@ public class Transition {
 		return outArcs;
 	}
 
-	public void addInArc(InArc inArc) {
+	public void addInArc(InArc inArc) throws RepeatedArc {
 		if (!existedArc(this.inArcs, inArc)) {
 			this.inArcs.add(inArc);
+		} else {
+			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
 	}
 
-	public void addOutArc(OutArc outArc) {
+	public void addOutArc(OutArc outArc) throws RepeatedArc {
 		if (!existedArc(this.outArcs, outArc)) {
 			this.outArcs.add(outArc);
+		} else {
+			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
 	}
 
@@ -59,7 +73,6 @@ public class Transition {
 				try {
 					arg0.modifyTokens();
 				} catch (InvalidTokenNumber e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
@@ -68,7 +81,6 @@ public class Transition {
 				try {
 					arg0.modifyTokens();
 				} catch (InvalidTokenNumber e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
@@ -79,7 +91,7 @@ public class Transition {
 
 	@Override
 	public String toString () {
-		return "InArcs" + this.getInArcs() + "OutArcs" + this.getOutArcs();
+		return "InArcs: " + this.getInArcs() + "OutArcs: " + this.getOutArcs();
 	}
 
 }

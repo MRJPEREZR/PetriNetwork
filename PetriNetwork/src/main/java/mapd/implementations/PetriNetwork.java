@@ -21,8 +21,7 @@ public class PetriNetwork implements IPetriNetwork {
 	private HashMap<String, Place> places; 
 	private HashMap<String, Transition> transitions;
 	private HashMap<String, Arc> arcs;
-	private List<List<String>> records = new ArrayList<List<String>>();
-	
+
 	/**
 	 * Default constructor for the PetriNetwork class.
 	 * <p>
@@ -39,7 +38,6 @@ public class PetriNetwork implements IPetriNetwork {
 		this.places = new HashMap<String, Place>();
 		this.transitions = new HashMap<String, Transition>();
 		this.arcs = new HashMap<String, Arc>();
-		this.records = new ArrayList<List<String>>();
 	}
 
 	public HashMap<String, Place> getPlaces() {
@@ -53,49 +51,29 @@ public class PetriNetwork implements IPetriNetwork {
 	public HashMap<String, Arc> getArcs() {
 		return arcs;
 	}
-	
-	public List<List<String>> getRecords() {
-		return records;
-	}
-	
+
 	public Place getPlace(String label) throws ElementNameNotExists {
 		if (this.places.containsKey(label)) {
 			return this.places.get(label);
-		}else {
+		} else {
 			throw new ElementNameNotExists("A place with this name does not exist");
 		}
 	}
 
 	public Transition getTransition(String label) throws ElementNameNotExists {
-		if (!this.transitions.containsKey(label)) {
-			throw new ElementNameNotExists("A place with this name does not exist");
-		}else {
+		if (this.transitions.containsKey(label)) {
 			return this.transitions.get(label);
+		} else {
+			throw new ElementNameNotExists("A transition with this name does not exist");
 		}
 	}
 
 	public Arc getArc(String label) throws ElementNameNotExists {
-		if (!this.arcs.containsKey(label)) {
-			throw new ElementNameNotExists("A place with this name does not exist");
-		}else {
+		if (this.arcs.containsKey(label)) {
 			return this.arcs.get(label);
+		} else {
+			throw new ElementNameNotExists("An arc with this name does not exist");
 		}
-	}
-
-	public void setRecords(List<List<String>> records) {
-		this.records = records;
-	}
-
-	public void setPlaces(HashMap<String, Place> places) {
-		this.places = places;
-	}
-
-	public void setTransitions(HashMap<String, Transition> transitions) {
-		this.transitions = transitions;
-	}
-
-	public void setArcs(HashMap<String, Arc> arcs) {
-		this.arcs = arcs;
 	}
 	
 	/**
@@ -110,20 +88,20 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void addPlace(String label) throws RepeatedNameElement {
-		if (! this.places.containsKey(label)) {
-			Place place = new Place();
+		if (!this.places.containsKey(label)) {
+			Place place = new Place(label);
 			this.places.put(label, place);
-		}else {
+		} else {
 			throw new RepeatedNameElement("A Place already exists with this name");
 		}
 	}
 
 	@Override
 	public void addPlace(String label, Integer tokens) throws InvalidTokenNumber, RepeatedNameElement {
-		if (! this.places.containsKey(label)) {
-			Place place = new Place(tokens);
+		if (!this.places.containsKey(label)) {
+			Place place = new Place(label, tokens);
 			this.places.put(label, place);
-		}else {
+		} else {
 			throw new RepeatedNameElement("A Place already exists with this name");
 		}
 	}
@@ -144,12 +122,10 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void rmPlace(String label) throws ElementNameNotExists {
-		if (this.places.containsKey(label)) {
+		Place place = this.getPlace(label);
+		if (place != null) {
 			this.places.remove(label);
-		}else {
-			throw new ElementNameNotExists(label);
 		}
-		
 	}
 
 	/**
@@ -166,9 +142,11 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void setPlaceTokens(String label, Integer tokens) throws InvalidTokenNumber, ElementNameNotExists {
-		getPlace(label).setTokens(tokens);
+		Place place = this.getPlace(label);
+		if (place != null) {
+			place.setTokens(tokens);
+		}
 	}
-	
 	
 	/**
 	 * Adds a new Transition to the Petri network with the specified label.
@@ -182,10 +160,10 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void addTransition(String label) throws RepeatedNameElement {
-		if (! this.transitions.containsKey(label)) {
-			Transition transition = new Transition();
+		if (!this.transitions.containsKey(label)) {
+			Transition transition = new Transition(label);
 			this.transitions.put(label, transition);
-		}else {
+		} else {
 			throw new RepeatedNameElement("A transition already exists with this name");
 		}
 	}
@@ -201,10 +179,9 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void rmTransition(String label) throws ElementNameNotExists {
-		if (this.places.containsKey(label) ) {
+		Transition transition = this.getTransition(label);
+		if (transition != null) {
 			this.transitions.remove(label);
-		}else {
-			throw new ElementNameNotExists(label);
 		}
 	}
 	
@@ -222,17 +199,17 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @throws InvalidWeightNumber   If the provided weight is invalid (e.g., negative).
 	 * @throws IllegalArgumentException If the specified arc type is not recognized.
 	 */
-	private Arc createArc(String type, Place place, Integer newWeight) throws InvalidWeightNumber {
+	private Arc createArc(String label, String type, Place place, Integer newWeight) throws InvalidWeightNumber {
 		int weight = (newWeight == null) ? 1 : newWeight;
         switch (type.toLowerCase()) {
             case "in":
-                return new InArc(place, weight);
+                return new InArc(label, place, weight);
             case "out":
-                return new OutArc(place, weight);
+                return new OutArc(label, place, weight);
             case "outzero":
-                return new OutZeroArc(place, weight);
+                return new OutZeroArc(label, place, weight);
             case "outbouncer":
-                return new OutBouncerArc(place, weight);
+                return new OutBouncerArc(label, place, weight);
             default:
             	throw new IllegalArgumentException("No valid " + type + " arc type");
         }
@@ -259,19 +236,13 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void addArc(String label, String transitionLabel, String placeLabel, String type, Integer weight) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc, ElementNameNotExists {
-		if (! this.arcs.containsKey(label)) {
-			if (!this.isArcRepeated(transitionLabel, placeLabel, type)) {
-				Place place = getPlace(placeLabel);
-				Transition transition = getTransition(transitionLabel);
-				Arc arc = createArc(type, place, weight);
-		        arc.addToTransition(transition);
-		        this.arcs.put(label, arc);
-		        List<String> arcRecord = Arrays.asList(transitionLabel, placeLabel, type);
-		        records.add(arcRecord);
-			}else {
-				throw new RepeatedArc("An Arc in the same direction already exists");
-			}
-		}else {
+		if (!this.arcs.containsKey(label)) {
+			Place place = this.getPlace(placeLabel);
+			Transition transition = this.getTransition(transitionLabel);
+			Arc arc = createArc(label, type, place, weight);
+			arc.addToTransition(transition);
+			this.arcs.put(label, arc);
+		} else {
 			throw new RepeatedNameElement("An arc already exists with this name");
 		}
 	}
@@ -279,77 +250,17 @@ public class PetriNetwork implements IPetriNetwork {
 	
 	@Override
 	public void addArc(String label, String transitionLabel, String placeLabel, String type) throws InvalidWeightNumber, RepeatedNameElement, RepeatedArc, ElementNameNotExists {
-		if ( !this.arcs.containsKey(label)) {
-			if (!this.isArcRepeated(transitionLabel, placeLabel, type)) {
-				Place place = getPlace(placeLabel);
-				Transition transition = getTransition(transitionLabel);
-				Arc arc = createArc(type, place, null);
-		        arc.addToTransition(transition);
-		        this.arcs.put(label, arc);
-		        List<String> arcRecord = Arrays.asList(transitionLabel, placeLabel, type);
-		        records.add(arcRecord);
-			}else {
-				throw new RepeatedArc("An Arc in the same direction already exists");
-			}
-		}else {
+		if (!this.arcs.containsKey(label)) {
+			Place place = this.getPlace(placeLabel);
+			Transition transition = this.getTransition(transitionLabel);
+			Arc arc = createArc(label, type, place, null);
+			arc.addToTransition(transition);
+			this.arcs.put(label, arc);
+		} else {
 			throw new RepeatedNameElement("An arc already exists with this name");
 		}
 	}
-	
-	/**
-	 * Adds a new Arc to the Petri network, linking a specified Transition and Place with a default weight.
-	 * <p>
-	 * This method creates an Arc of the given type between the specified Transition and Place,
-	 * using the provided label as a unique identifier. The Arc is created with a default weight of 1,
-	 * since no weight parameter is provided. The method checks for duplicate arcs with the same 
-	 * direction (Transition to Place) to avoid conflicts. If a duplicate arc or an arc with the same
-	 * label already exists, an exception is thrown.
-	 * 
-	 * @param label           The unique identifier for the Arc to be added.
-	 * @param transitionLabel The label of the Transition to which the Arc will be connected.
-	 * @param placeLabel      The label of the Place to which the Arc will be connected.
-	 * @param type            The type of the Arc (e.g., "in", "out", "outzero", "outbouncer").
-	 * @throws InvalidWeightNumber If the provided weight is invalid (handled by the default weight).
-	 * @throws RepeatedNameElement If an Arc with the same label already exists in the network.
-	 * @throws RepeatedArc         If an Arc with the same transition, place, and type already exists.
-	 * @throws ElementNameNotExists 
-	 */
-	@Override
-	public void editArcDirection(String label, String labelTransition, String labelPlace) throws InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		Arc oldArc = getArc(label);
-		Integer weight = oldArc.getWeight();
-		Place place = oldArc.getPlace();
-		
-		Transition involvedTransition = transitions.get(labelTransition);
-		
-		String type = "";
-		if (oldArc instanceof InArc) {
-			type = "in";
-			if (! isArcRepeated(labelTransition, labelPlace, type)) {
-				involvedTransition.getInArcs().remove(oldArc);
-				Arc newArc = createArc("out", place, weight);
-				newArc.addToTransition(involvedTransition);
-				this.arcs.put(label, newArc);
-				// update record
-				updateArcDirectionInRecord(labelTransition, labelPlace, "out");
-			}else {
-				throw new RepeatedArc("An Arc in the same direction already exists");
-			}
-		}else if (oldArc instanceof OutArc || oldArc instanceof OutZeroArc || oldArc instanceof OutBouncerArc) {
-			type = "out";
-			if (! isArcRepeated(labelTransition, labelPlace, type)) {
-				involvedTransition.getInArcs().remove(oldArc);
-				Arc newArc = createArc("in", place, weight);
-				newArc.addToTransition(involvedTransition);
-				this.arcs.put(label, newArc);
-				// update record
-				updateArcDirectionInRecord(labelTransition, labelPlace, "in");
-			}else {
-				throw new RepeatedArc("An Arc in the same direction already exists");
-			}
-		}
-	}
-	
+
 	/**
 	 * Sets the weight of a specified Arc in the Petri network.
 	 * <p>
@@ -363,7 +274,10 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void setArcWeight(String label, Integer weight) throws InvalidWeightNumber, ElementNameNotExists {
-		getArc(label).setWeight(weight);
+		Arc arc = this.getArc(label);
+		if (arc != null) {
+			arc.setWeight(weight);
+		}
 	}
 	
 	/**
@@ -377,12 +291,10 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void rmArc(String label) throws ElementNameNotExists {
-		if (arcs.containsKey(label)) {
-			arcs.remove(label);
-		}else {
-			throw new ElementNameNotExists(label);
+		Arc arc = this.getArc(label);
+		if (arc != null) {
+			this.arcs.remove(label);
 		}
-		
 	}
 	
 	/**
@@ -497,19 +409,12 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void renamePlace(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
-		if(places.containsKey(oldName)) {
-			Place place = places.get(oldName);
-			places.remove(oldName);
-			if (!arcs.containsKey(newName)) {
-				places.put(newName, place);
-				// update record of new place name
-				updateNameInRecords(oldName, newName, "place");
-				
-			}else {
-				throw new RepeatedNameElement("New name already exists");
-			}
-		}else {
-			throw new ElementNameNotExists("Element with name" + oldName + "does not exist");
+		Place place = this.getPlace(oldName);
+		if (place != null && !this.places.containsKey(newName)) {
+			this.places.remove(oldName);
+			places.put(newName, place);
+		} else {
+			throw new RepeatedNameElement("New place name already exists");
 		}
 	}
 	
@@ -528,18 +433,12 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void renameTransition(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
-		if (transitions.containsKey(oldName)) {
-			Transition transition = transitions.get(oldName);
-			transitions.remove(oldName);
-			if (!arcs.containsKey(newName)) {
-				transitions.put(newName, transition);
-				// update record of transition name
-				updateNameInRecords(oldName, newName, "transition");
-			}else {
-				throw new RepeatedNameElement("New name already exists");
-			}
-		}else {
-			throw new ElementNameNotExists("Element with name" + oldName + "does not exist");
+		Transition transition = this.getTransition(oldName);
+		if (transition != null && !this.transitions.containsKey(newName)) {
+			this.transitions.remove(oldName);
+			this.transitions.put(newName, transition);
+		} else {
+			throw new RepeatedNameElement("New transition name already exists");
 		}
 	}
 	
@@ -558,80 +457,13 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void renameArc(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
-		if (arcs.containsKey(oldName)) {
-			Arc arc = arcs.get(oldName);
-			arcs.remove(oldName);
-			if (!arcs.containsKey(newName)) {
-				arcs.put(newName, arc);
-			}else {
-				throw new RepeatedNameElement("New name already exists");
-			}
-		}else {
-			throw new ElementNameNotExists("Element with name" + oldName + "does not exist");
+		Arc arc = this.getArc(oldName);
+		if (arc != null && !this.arcs.containsKey(newName)) {
+			this.arcs.remove(oldName);
+			this.arcs.put(newName, arc);
+		} else {
+			throw new RepeatedNameElement("New arc name already exists");
 		}
 	}
-	
-	/**
-	 * Checks if an Arc with the same transition, place, and type already exists in the Petri network.
-	 * <p>
-	 * This method creates a record based on the provided transition, place, and type and 
-	 * verifies if this record is already present in the list of existing arc records. 
-	 * It helps prevent duplicate arcs from being created in the network.
-	 * 
-	 * @param transition The label of the Transition associated with the Arc.
-	 * @param place      The label of the Place associated with the Arc.
-	 * @param type       The type of the Arc (e.g., "in", "out", "outzero", "outbouncer").
-	 * @return True if an Arc with the same transition, place, and type exists; false otherwise.
-	 */
-	private Boolean isArcRepeated(String transition, String place, String type) {
-		List<String> arcRecord = Arrays.asList(transition, place, type);
-		return records.contains(arcRecord);
-	}
-	
-	/**
-	 * Updates the name in the records for either "place" or "transition" based on the given type.
-	 * The method iterates through the records and replaces the `oldName` with the `newName`
-	 * in the appropriate index of each list, determined by the type.
-	 *
-	 * @param oldName the original name to be updated in the records
-	 * @param newName the new name to replace the old name in the records
-	 * @param type    specifies the type of the record, either "place" or "transition".
-	 *                If the type is "place", the name is updated at index 1 of the list.
-	 *                If the type is "transition", the name is updated at index 0 of the list.
-	 */
-	private void updateNameInRecords (String oldName, String newName, String type) {
-		Iterator <List<String>> iterator = this.records.iterator();
-		int index = 0;
-		if (type.equals("place")) {
-			index = 1;
-		}else if(type.equals("transition")) {
-			index = 0;
-		}
-		while(iterator.hasNext()) {
-			List<String> list = iterator.next();
-			if (list.contains(oldName)) {
-				list.set(index, newName);
-			}
-		}
-	}
-	
-	/**
-	 * Updates the direction of an arc between a specified transition and place in the records.
-	 * The method iterates through the records and replaces the arc direction with the given 
-	 * `newDirection` for the matching transition and place.
-	 *
-	 * @param transition   the name of the transition involved in the arc
-	 * @param place        the name of the place involved in the arc
-	 * @param newDirection the new direction to set for the arc between the transition and place.
-	 *                     This value will replace the element at index 2 in the matching record.
-	 */
-	private void updateArcDirectionInRecord (String transition, String place, String newDirection) {
-		Iterator <List<String>> iterator = this.records.iterator();
-		while(iterator.hasNext()) {
-			List<String> list = iterator.next();
-			if (list.contains(transition) && list.contains(place)) {
-				list.set(2, newDirection);
-			}
-		}
-	}
+
 }

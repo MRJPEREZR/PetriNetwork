@@ -2,25 +2,26 @@ package mapd.implementations;
 
 import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.RepeatedArc;
 
 public class OutArc extends Arc {
 
 	protected Boolean isActive;
 
-	OutArc(Place place) {
-		super(place);
+	OutArc(String label, Place place) {
+		super(label, place);
 		setIsActive();
 	}
-	
-	OutArc(Place place, int weight) throws InvalidWeightNumber {
-		super(place, weight);
+
+	OutArc(String label, Place place, int weight) throws InvalidWeightNumber {
+		super(label, place, weight);
 		setIsActive();
 	}
 
 	public Boolean getIsActive() {
 		return isActive;
 	}
-	
+
 	public void setIsActive() {
 		this.isActive = this.getPlace().getTokens() - this.getWeight() >= 0;
 	}
@@ -33,15 +34,15 @@ public class OutArc extends Arc {
 			this.setIsActive();
 		}
 	}
-	
+
 	@Override
-    public void addToTransition(Transition transition) {
+    public void addToTransition(Transition transition) throws RepeatedArc {
         transition.addOutArc(this);
     }
-	
+
 	@Override
 	public String toString() {
-		return "Arc has weight " + this.getWeight() + " and it is " + this.getIsActive();
+		return "Conventional out arc has weight " + this.getWeight() + " and it is " + this.getIsActive();
 	}
 
 }

@@ -2,15 +2,16 @@ package mapd.implementations;
 
 import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.RepeatedArc;
 
 public class InArc extends Arc {
 
-	InArc(Place place) {
-		super(place);
+	InArc(String label, Place place) {
+		super(label, place);
 	}
 
-	InArc(Place place, int weight) throws InvalidWeightNumber {
-		super(place, weight);
+	InArc(String label, Place place, int weight) throws InvalidWeightNumber {
+		super(label, place, weight);
 	}
 
 	@Override
@@ -20,12 +21,12 @@ public class InArc extends Arc {
 	}
 
 	@Override
-    public void addToTransition(Transition transition) {
+    public void addToTransition(Transition transition) throws RepeatedArc {
         transition.addInArc(this);
     }
-	
+
 	@Override
 	public String toString() {
-		return "Arc has weight " + this.getWeight();
+		return "In arc has weight " + this.getWeight();
 	}
 }

@@ -51,8 +51,8 @@ public class PlaceTest {
 
     @Test
     public void testToString() {
-        assertEquals("Place has 0", place.toString());
+        assertEquals("Place has 0 tokens", place.toString());
         place.setTokens(15);
-        assertEquals("Place has 15", place.toString());
+        assertEquals("Place has 15 tokens", place.toString());
     }
 }
