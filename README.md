@@ -40,11 +40,47 @@ The UML model was created to be aligned with the following prepositions:
 ## Modelling
 
 ### Class Diagram
-![Sequence Diagram](Docs/Modelling/PN_Diagram_Final.png)
+![Sequence Diagram](Docs/Modelling/PN_Diagram_Final_modified.png)
+
+### Project Structure
+
+```
+PetriNetwork
+└── src
+     ├── main
+     │   └── java
+     │       └── mapd
+     │           ├── exceptions
+     │           │   ├── ElementNameNotExists.java
+     │           │   ├── InvalidTokenNumber.java
+     │           │   ├── InvalidWeightNumber.java
+     │           │   ├── RepeatedArc.java
+     │           │   └── RepeatedNameElement.java
+     │           ├── implementations
+     │           │   ├── Arc.java
+     │           │   ├── Dashboard.java
+     │           │   ├── InArc.java
+     │           │   ├── OutArc.java
+     │           │   ├── OutBouncerArc.java
+     │           │   ├── OutZeroArc.java
+     │           │   ├── PetriNetwork.java
+     │           │   ├── Place.java
+     │           │   └── Transition.java
+     │           └── interfaces
+     │               └── IPetriNetwork.java
+     └── test
+         └── java
+             └── mapd
+                 ├── InArcTest.java
+                 ├── OutArcTest.java
+                 ├── PetriNetworkTest.java
+                 ├── PlaceTest.java
+                 └── TransitionTest.java
+```
 
 ### How to run
 
-In the `Dashboard.java` file you can find the main function to execute the program. There is a Petri Network already created to emulated the behavior of the following example:
+In the **`Dashboard.java`** file you can find the main function to execute the program. There is a Petri Network already created to emulated the behavior of the following example:
 ![PetriNetworkExample](Docs/Example.png)
 
 The code to describe this network is:
