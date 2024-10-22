@@ -1,11 +1,10 @@
+package mapd;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import mapd.implementations.*;
 import mapd.exceptions.InvalidTokenNumber;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TransitionTest {
 
@@ -71,32 +70,44 @@ public class TransitionTest {
     }
 
     @Test
-    public void testIsFireableWithActiveOutArc() {
-        outArc.setIsActive(true);
+    public void testIsFireableWithActiveOutArc() throws InvalidTokenNumber {
+    	this.place.setTokens(1);
         transition.addOutArc(outArc);
+        transition.getOutArcs().get(0).setIsActive();
         assertTrue(transition.isFireable());
     }
 
     @Test
     public void testIsNotFireable() {
-        outArc.setIsActive(false);
         transition.addOutArc(outArc);
+        transition.getOutArcs().get(0).setIsActive();
         assertFalse(transition.isFireable());
     }
 
     @Test
     public void testFireWhenFireable() throws InvalidTokenNumber {
-        outArc.setIsActive(true);
+    	this.place.setTokens(1);
         transition.addOutArc(outArc);
-        transition.addInArc(inArc);
+        Place anotherPlace = new Place();
+        InArc anotherInArc = new InArc(anotherPlace);
+        transition.addInArc(anotherInArc);
+        transition.getOutArcs().get(0).setIsActive();
         transition.fire();
+        assertFalse(transition.isFireable());
+        assertEquals(0, transition.getOutArcs().get(0).getPlace().getTokens());
+        assertEquals(1, transition.getInArcs().get(0).getPlace().getTokens());
     }
 
     @Test
     public void testFireWhenNotFireable() {
-        outArc.setIsActive(false);
         transition.addOutArc(outArc);
+        Place anotherPlace = new Place();
+        InArc anotherInArc = new InArc(anotherPlace);
+        transition.addInArc(anotherInArc);
+        transition.getOutArcs().get(0).setIsActive();
         transition.fire();
+        assertEquals(0, transition.getOutArcs().get(0).getPlace().getTokens());
+        assertEquals(0, transition.getInArcs().get(0).getPlace().getTokens());
     }
 
     @Test

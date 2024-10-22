@@ -1,3 +1,5 @@
+package mapd;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,8 +52,10 @@ public class PlaceTest {
     }
 
     @Test
+==== BASE ====
     public void testToString() {
-        assertEquals("Place has 0 tokens", place.toString());
+        assertEquals("Place has 0", place.toString());
+==== BASE ====
         place.setTokens(15);
         assertEquals("Place has 15 tokens", place.toString());
     }

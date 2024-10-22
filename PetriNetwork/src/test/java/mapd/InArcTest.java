@@ -1,3 +1,5 @@
+package mapd;
+
 import mapd.implementations.InArc;
 import mapd.implementations.Place;
 import mapd.implementations.Transition;
@@ -13,7 +15,7 @@ class InArcTest {
     private Transition testTransition;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvalidTokenNumber {
         testPlace = new Place();
         testPlace.setTokens(5);
         testTransition = new Transition();

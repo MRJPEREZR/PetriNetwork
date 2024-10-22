@@ -61,7 +61,7 @@ public class Dashboard {
 			// net.addArc("errorArc", "t1", "p2", "out", 3);
 			// net.addArc("errorArc", "t1", "p2", "outA", 3);
 		}catch(Exception error) {
-			System.out.println("Error: " + error.getMessage());
+			System.err.println("Error: " + error.getMessage());
 		}
 	}
 
