@@ -11,7 +11,7 @@ public class Transition {
 	private List<OutArc> outArcs;
 	private String label;
 
-	Transition(String label) {
+	public Transition(String label) {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;

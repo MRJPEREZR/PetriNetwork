@@ -6,11 +6,11 @@ import mapd.exceptions.RepeatedArc;
 
 public class InArc extends Arc {
 
-	InArc(String label, Place place) {
+	public InArc(String label, Place place) {
 		super(label, place);
 	}
 
-	InArc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public InArc(String label, Place place, int weight) throws InvalidWeightNumber {
 		super(label, place, weight);
 	}
 

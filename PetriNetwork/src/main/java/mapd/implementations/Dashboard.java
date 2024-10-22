@@ -23,7 +23,7 @@ public class Dashboard {
 			net.addArc("a3", "t1", "p3", "in", 3);
 			net.addArc("a4", "t1", "p4", "in"); // by default weight is 1
 			
-			net.addArc("a5", "t1", "p2", "outbouncer");
+			// net.addArc("a5", "t1", "p2", "outbouncer");
 			
 			fireableTransitions = net.fireableTransitions();
 			net.fire(fireableTransitions.get(0)); // t1

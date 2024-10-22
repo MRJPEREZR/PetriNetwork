@@ -12,7 +12,7 @@ public class PlaceTest {
 
     @BeforeEach
     public void setUp() {
-        place = new Place();
+        place = new Place("p");
     }
 
     @Test
@@ -22,14 +22,14 @@ public class PlaceTest {
 
     @Test
     public void testConstructorWithValidTokens() throws InvalidTokenNumber {
-        Place placeWithTokens = new Place(5);
+        Place placeWithTokens = new Place("p",5);
         assertEquals(5, placeWithTokens.getTokens());
     }
 
     @Test
     public void testConstructorWithInvalidTokens() {
         assertThrows(InvalidTokenNumber.class, () -> {
-            new Place(-1);
+            new Place("p", -1);
         });
     }
 
@@ -51,12 +51,10 @@ public class PlaceTest {
         });
     }
 
-    @Test
-==== BASE ====
-    public void testToString() {
-        assertEquals("Place has 0", place.toString());
-==== BASE ====
+    @Test 
+    public void testToString() throws InvalidTokenNumber {
+        assertTrue(place.toString().equals("Place has 0 tokens"));
         place.setTokens(15);
-        assertEquals("Place has 15 tokens", place.toString());
+        assertTrue(place.toString().equals("Place has 15 tokens"));
     }
 }

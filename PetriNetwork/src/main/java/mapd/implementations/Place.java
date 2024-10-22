@@ -11,12 +11,12 @@ public class Place {
 		return tokens >= 0;
 	}
 	
-	Place(String label) {
+	public Place(String label) {
 		this.tokens = 0;
 		this.label = label;
 	}
 
-	Place(String label, Integer tokens) throws InvalidTokenNumber {
+	public Place(String label, Integer tokens) throws InvalidTokenNumber {
 		 if (isValidTokens(tokens)) {
 			 this.tokens = tokens;
 		 } else {

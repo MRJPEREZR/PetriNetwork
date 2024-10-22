@@ -8,12 +8,12 @@ public class OutArc extends Arc {
 
 	protected Boolean isActive;
 
-	OutArc(String label, Place place) {
+	public OutArc(String label, Place place) {
 		super(label, place);
 		setIsActive();
 	}
 
-	OutArc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public OutArc(String label, Place place, int weight) throws InvalidWeightNumber {
 		super(label, place, weight);
 		setIsActive();
 	}

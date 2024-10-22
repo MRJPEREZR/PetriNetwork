@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import mapd.implementations.*;
 import mapd.exceptions.InvalidTokenNumber;
+import mapd.exceptions.RepeatedArc;
 
 public class TransitionTest {
 
@@ -15,10 +16,10 @@ public class TransitionTest {
 
     @BeforeEach
     public void setUp() {
-        transition = new Transition();
-        place = new Place();
-        inArc = new InArc(place);
-        outArc = new OutArc(place);
+        transition = new Transition("t");
+        place = new Place("p");
+        inArc = new InArc("a",place);
+        outArc = new OutArc("a",place);
     }
 
     @Test
@@ -28,49 +29,51 @@ public class TransitionTest {
     }
 
     @Test
-    public void testAddInArc() {
+    public void testAddInArc() throws RepeatedArc {
         transition.addInArc(inArc);
         assertEquals(1, transition.getInArcs().size());
         assertTrue(transition.getInArcs().contains(inArc));
     }
 
     @Test
-    public void testAddOutArc() {
+    public void testAddOutArc() throws RepeatedArc {
         transition.addOutArc(outArc);
         assertEquals(1, transition.getOutArcs().size());
         assertTrue(transition.getOutArcs().contains(outArc));
     }
 
     @Test
-    public void testAddDuplicateInArc() {
+    public void testAddDuplicateInArc() throws RepeatedArc {
         transition.addInArc(inArc);
-        transition.addInArc(inArc);
-        assertEquals(1, transition.getInArcs().size());
+        assertThrows(RepeatedArc.class, () -> {
+        	transition.addInArc(inArc);
+        });
     }
 
     @Test
-    public void testAddDuplicateOutArc() {
+    public void testAddDuplicateOutArc() throws RepeatedArc {
         transition.addOutArc(outArc);
-        transition.addOutArc(outArc);
-        assertEquals(1, transition.getOutArcs().size());
+        assertThrows(RepeatedArc.class, () -> {
+        	transition.addOutArc(outArc);
+        });
     }
 
     @Test
-    public void testRemoveInArc() {
+    public void testRemoveInArc() throws RepeatedArc {
         transition.addInArc(inArc);
         transition.rmInArc(inArc);
         assertFalse(transition.getInArcs().contains(inArc));
     }
 
     @Test
-    public void testRemoveOutArc() {
+    public void testRemoveOutArc() throws RepeatedArc {
         transition.addOutArc(outArc);
         transition.rmOutArc(outArc);
         assertFalse(transition.getOutArcs().contains(outArc));
     }
 
     @Test
-    public void testIsFireableWithActiveOutArc() throws InvalidTokenNumber {
+    public void testIsFireableWithActiveOutArc() throws InvalidTokenNumber, RepeatedArc {
     	this.place.setTokens(1);
         transition.addOutArc(outArc);
         transition.getOutArcs().get(0).setIsActive();
@@ -78,18 +81,18 @@ public class TransitionTest {
     }
 
     @Test
-    public void testIsNotFireable() {
+    public void testIsNotFireable() throws RepeatedArc {
         transition.addOutArc(outArc);
         transition.getOutArcs().get(0).setIsActive();
         assertFalse(transition.isFireable());
     }
 
     @Test
-    public void testFireWhenFireable() throws InvalidTokenNumber {
+    public void testFireWhenFireable() throws InvalidTokenNumber, RepeatedArc {
     	this.place.setTokens(1);
         transition.addOutArc(outArc);
-        Place anotherPlace = new Place();
-        InArc anotherInArc = new InArc(anotherPlace);
+        Place anotherPlace = new Place("p1");
+        InArc anotherInArc = new InArc("a1", anotherPlace);
         transition.addInArc(anotherInArc);
         transition.getOutArcs().get(0).setIsActive();
         transition.fire();
@@ -99,10 +102,10 @@ public class TransitionTest {
     }
 
     @Test
-    public void testFireWhenNotFireable() {
+    public void testFireWhenNotFireable() throws RepeatedArc {
         transition.addOutArc(outArc);
-        Place anotherPlace = new Place();
-        InArc anotherInArc = new InArc(anotherPlace);
+        Place anotherPlace = new Place("p1");
+        InArc anotherInArc = new InArc("a1", anotherPlace);
         transition.addInArc(anotherInArc);
         transition.getOutArcs().get(0).setIsActive();
         transition.fire();
@@ -112,7 +115,8 @@ public class TransitionTest {
 
     @Test
     public void testToString() {
-        String expected = "InArcs" + transition.getInArcs() + "OutArcs" + transition.getOutArcs();
-        assertEquals(expected, transition.toString());
+    	// return "InArcs: " + this.getInArcs() + "OutArcs: " + this.getOutArcs();
+        String expected = "InArcs: " + transition.getInArcs() + "OutArcs: " + transition.getOutArcs();
+        assertTrue(transition.toString().equals(expected));
     }
 }
