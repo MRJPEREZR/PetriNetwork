@@ -63,6 +63,7 @@ public class Transition {
 	}
 
 	public Boolean isFireable() {
+		this.outArcs.stream().forEach(OutArc::setIsActive);
         return outArcs.stream().anyMatch(arc -> arc.getIsActive());
     }
 
