@@ -1,8 +1,6 @@
 package mapd.implementations;
 
-import java.util.List;
-
-public class Dashboard {
+public class Main {
 	
 	public static void main (String[] args) throws Exception {
 		try {
