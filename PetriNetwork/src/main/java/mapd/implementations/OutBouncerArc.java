@@ -5,12 +5,12 @@ import mapd.exceptions.InvalidWeightNumber;
 
 public class OutBouncerArc extends OutArc {
 
-	OutBouncerArc(String label, Place place) {
+	public OutBouncerArc(String label, Place place) {
 		super(label, place);
 		this.setIsActive();
 	};
 
-	OutBouncerArc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public OutBouncerArc(String label, Place place, int weight) throws InvalidWeightNumber {
 		super(label, place, weight);
 		this.setIsActive();
 	}

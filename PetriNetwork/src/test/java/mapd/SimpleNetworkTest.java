@@ -87,10 +87,26 @@ public class SimpleNetworkTest {
 	}
 	
 	@Test
-	public void testRemovePlace() throws RepeatedNameElement, InvalidWeightNumber, RepeatedArc, ElementNameNotExists, InvalidTokenNumber {
+	public void testRemovePlaceNotExist() throws RepeatedNameElement, InvalidWeightNumber, RepeatedArc, ElementNameNotExists, InvalidTokenNumber {
 		setup();
 		assertThrows(ElementNameNotExists.class, () -> {
-			net.setPlaceTokens("placeNotExist", 3);
+			net.rmPlace("PlaceNotExist");
+		});
+	}
+	
+	@Test
+	public void testRemoveTransitionNotExist() throws RepeatedNameElement, InvalidWeightNumber, RepeatedArc, ElementNameNotExists, InvalidTokenNumber {
+		setup();
+		assertThrows(ElementNameNotExists.class, () -> {
+			net.rmTransition("TransitionNotExist");
+		});
+	}
+	
+	@Test
+	public void testRemoveArcNotExist() throws RepeatedNameElement, InvalidWeightNumber, RepeatedArc, ElementNameNotExists, InvalidTokenNumber {
+		setup();
+		assertThrows(ElementNameNotExists.class, () -> {
+			net.rmArc("ArcNotExist");
 		});
 	}
 	

@@ -14,13 +14,13 @@ public abstract class Arc {
 		return weight >= 1;
 	}
 
-	Arc(String label, Place place) {
+	public Arc(String label, Place place) {
 		this.place = place;
 		this.weight = 1;
 		this.label = label;
 	}
 
-	Arc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public Arc(String label, Place place, int weight) throws InvalidWeightNumber {
 		this.place = place;
 		this.label = label;
 		if (isValidWeight(weight)) {
