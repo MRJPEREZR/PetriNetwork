@@ -18,7 +18,7 @@ public abstract class Arc {
 		this(label, place, 1);
 	}
 
-	Arc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public Arc(String label, Place place, int weight) throws InvalidWeightNumber {
 		this.place = place;
 		this.label = label;
 		if (isValidWeight(weight)) {

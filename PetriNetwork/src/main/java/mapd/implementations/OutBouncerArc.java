@@ -9,7 +9,7 @@ public class OutBouncerArc extends OutArc {
 		this(label, place, 0);
 	};
 
-	OutBouncerArc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public OutBouncerArc(String label, Place place, int weight) throws InvalidWeightNumber {
 		super(label, place, weight);
 	}
 	
