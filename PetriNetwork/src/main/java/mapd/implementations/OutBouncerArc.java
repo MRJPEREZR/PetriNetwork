@@ -6,7 +6,7 @@ import mapd.exceptions.InvalidWeightNumber;
 public class OutBouncerArc extends OutArc {
 
 	OutBouncerArc(String label, Place place) throws InvalidWeightNumber {
-		super(label, place);
+		this(label, place, 0);
 	};
 
 	OutBouncerArc(String label, Place place, int weight) throws InvalidWeightNumber {

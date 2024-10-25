@@ -32,10 +32,6 @@ public abstract class Arc {
 		return place;
 	}
 
-	public void setPlace(Place place) {
-		this.place = place;
-	}
-
 	public int getWeight() {
 		return weight;
 	}

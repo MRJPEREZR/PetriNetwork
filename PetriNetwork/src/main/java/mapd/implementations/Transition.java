@@ -16,7 +16,7 @@ public class Transition {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;
-		this.isFireable = true;
+		this.isFireable = false;
 	}
 	
 	public void setLabel(String label) {
@@ -71,10 +71,11 @@ public class Transition {
 	}
 
 	public void updateIsFireable() {
-        this.isFireable = outArcs.stream().anyMatch(arc -> arc.getIsActive());
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.getIsActive()) || (outArcs.size() == 0 && inArcs.size() != 1);
     }
 
 	public void fire() {
+		updateIsFireable();
 		if (isFireable) {
 			System.out.println("Firing ...");
 			outArcs.stream().forEach(arg0 -> {
@@ -91,7 +92,7 @@ public class Transition {
 					e.printStackTrace();
 				}
 			});
-			updateIsFireable();
+			outArcs.stream().forEach(OutArc::isActive);
 		} else {
 			System.out.println("Transition is not fireable");
 		}

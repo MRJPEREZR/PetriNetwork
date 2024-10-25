@@ -410,6 +410,7 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renamePlace(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Place place = this.getPlace(oldName);
 		if (place != null && !this.places.containsKey(newName)) {
+			place.setLabel(newName);
 			this.places.remove(oldName);
 			places.put(newName, place);
 		} else {
@@ -434,6 +435,7 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renameTransition(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Transition transition = this.getTransition(oldName);
 		if (transition != null && !this.transitions.containsKey(newName)) {
+			transition.setLabel(newName);
 			this.transitions.remove(oldName);
 			this.transitions.put(newName, transition);
 		} else {
@@ -467,7 +469,10 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 	
 	private void updateTransitions() {
-		transitions.forEach((key, transition) -> transition.updateIsFireable());
+		transitions.forEach((key, transition) -> {
+			transition.updateIsFireable();
+			System.out.println("Transition");
+		});
 	}
 
 }

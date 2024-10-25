@@ -38,6 +38,12 @@ public class OutArc extends Arc {
     public void addToTransition(Transition transition) throws RepeatedArc {
         transition.addOutArc(this);
     }
+	
+	@Override
+    public void setWeight(int weight) throws InvalidWeightNumber {
+        super.setWeight(weight);
+        this.isActive();
+    }
 
 	@Override
 	public String toString() {
