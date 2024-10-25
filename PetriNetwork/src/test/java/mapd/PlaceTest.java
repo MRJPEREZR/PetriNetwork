@@ -11,7 +11,7 @@ public class PlaceTest {
     private Place place;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InvalidTokenNumber {
         place = new Place("p");
     }
 

@@ -23,7 +23,7 @@ class OutArcTest {
     }
 
     @Test
-    void testOutArcCreationWithDefaultWeight() {
+    void testOutArcCreationWithDefaultWeight() throws InvalidWeightNumber {
         OutArc outArc = new OutArc("a1", testPlace);
         assertEquals(testPlace, outArc.getPlace());
         assertEquals(1, outArc.getWeight());
@@ -67,7 +67,7 @@ class OutArcTest {
     }
 
     @Test
-    void testAddToTransition() throws RepeatedArc {
+    void testAddToTransition() throws RepeatedArc, InvalidWeightNumber {
         OutArc outArc = new OutArc("a1", testPlace);
         outArc.addToTransition(testTransition);
         assertTrue(testTransition.getOutArcs().contains(outArc));

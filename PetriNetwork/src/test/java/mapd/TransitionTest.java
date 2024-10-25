@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import mapd.implementations.*;
 import mapd.exceptions.InvalidTokenNumber;
+import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 
 public class TransitionTest {
@@ -15,7 +16,7 @@ public class TransitionTest {
     private Place place;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws InvalidTokenNumber, InvalidWeightNumber {
         transition = new Transition("t");
         place = new Place("p");
         inArc = new InArc("a",place);
@@ -76,25 +77,25 @@ public class TransitionTest {
     public void testIsFireableWithActiveOutArc() throws InvalidTokenNumber, RepeatedArc {
     	this.place.setTokens(1);
         transition.addOutArc(outArc);
-        transition.getOutArcs().get(0).setIsActive();
+        transition.getOutArcs().get(0).isActive();
         assertTrue(transition.isFireable());
     }
 
     @Test
     public void testIsNotFireable() throws RepeatedArc {
         transition.addOutArc(outArc);
-        transition.getOutArcs().get(0).setIsActive();
+        transition.getOutArcs().get(0).isActive();
         assertFalse(transition.isFireable());
     }
 
     @Test
-    public void testFireWhenFireable() throws InvalidTokenNumber, RepeatedArc {
+    public void testFireWhenFireable() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber {
     	this.place.setTokens(1);
         transition.addOutArc(outArc);
         Place anotherPlace = new Place("p1");
         InArc anotherInArc = new InArc("a1", anotherPlace);
         transition.addInArc(anotherInArc);
-        transition.getOutArcs().get(0).setIsActive();
+        transition.getOutArcs().get(0).isActive();
         transition.fire();
         assertFalse(transition.isFireable());
         assertEquals(0, transition.getOutArcs().get(0).getPlace().getTokens());
@@ -102,12 +103,12 @@ public class TransitionTest {
     }
 
     @Test
-    public void testFireWhenNotFireable() throws RepeatedArc {
+    public void testFireWhenNotFireable() throws RepeatedArc, InvalidTokenNumber, InvalidWeightNumber {
         transition.addOutArc(outArc);
         Place anotherPlace = new Place("p1");
         InArc anotherInArc = new InArc("a1", anotherPlace);
         transition.addInArc(anotherInArc);
-        transition.getOutArcs().get(0).setIsActive();
+        transition.getOutArcs().get(0).isActive();
         transition.fire();
         assertEquals(0, transition.getOutArcs().get(0).getPlace().getTokens());
         assertEquals(0, transition.getInArcs().get(0).getPlace().getTokens());

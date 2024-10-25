@@ -23,7 +23,7 @@ class InArcTest {
     }
 
     @Test
-    void testInArcCreationWithDefaultWeight() {
+    void testInArcCreationWithDefaultWeight() throws InvalidWeightNumber {
         InArc inArc = new InArc("a1",testPlace);
         assertEquals(testPlace, inArc.getPlace());
         assertEquals(1, inArc.getWeight());
@@ -52,14 +52,14 @@ class InArcTest {
     }
 
     @Test
-    void testModifyTokensWithDefaultWeight() throws InvalidTokenNumber {
+    void testModifyTokensWithDefaultWeight() throws InvalidTokenNumber, InvalidWeightNumber {
         InArc inArc = new InArc("a1",testPlace);
         inArc.modifyTokens();
         assertEquals(6, testPlace.getTokens());
     }
 
     @Test
-    void testAddToTransition() throws RepeatedArc {
+    void testAddToTransition() throws RepeatedArc, InvalidWeightNumber {
         InArc inArc = new InArc("a1",testPlace);
         inArc.addToTransition(testTransition);
         assertTrue(testTransition.getInArcs().contains(inArc));
