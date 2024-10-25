@@ -10,6 +10,7 @@ public class Transition {
 	private List<InArc> inArcs;
 	private List<OutArc> outArcs;
 	private String label;
+	private Boolean isFireable;
 
 	public Transition(String label) {
 		this.inArcs = new ArrayList<InArc>(); 
@@ -61,14 +62,17 @@ public class Transition {
 	public void rmOutArc(OutArc outArc) {
 		this.outArcs.remove(outArc);
 	}
-
+	
 	public Boolean isFireable() {
-		this.outArcs.stream().forEach(OutArc::setIsActive);
-        return outArcs.stream().anyMatch(arc -> arc.getIsActive());
+		return this.isFireable;
+	}
+
+	public void updateIsFireable() {
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.getIsActive());
     }
 
 	public void fire() {
-		if (isFireable()) {
+		if (isFireable) {
 			System.out.println("Firing ...");
 			outArcs.stream().forEach(arg0 -> {
 				try {
@@ -84,6 +88,7 @@ public class Transition {
 					e.printStackTrace();
 				}
 			});
+			updateIsFireable();
 		} else {
 			System.out.println("Transition is not fireable");
 		}
