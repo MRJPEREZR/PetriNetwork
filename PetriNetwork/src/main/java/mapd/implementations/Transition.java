@@ -16,6 +16,7 @@ public class Transition {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;
+		this.isFireable = true;
 	}
 	
 	public void setLabel(String label) {
@@ -50,6 +51,7 @@ public class Transition {
 	public void addOutArc(OutArc outArc) throws RepeatedArc {
 		if (!existedArc(this.outArcs, outArc)) {
 			this.outArcs.add(outArc);
+			updateIsFireable();
 		} else {
 			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
@@ -61,6 +63,7 @@ public class Transition {
 
 	public void rmOutArc(OutArc outArc) {
 		this.outArcs.remove(outArc);
+		updateIsFireable();
 	}
 	
 	public Boolean isFireable() {

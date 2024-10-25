@@ -306,7 +306,6 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public List<String> fireableTransitions() {
-		updateTransitions();
 		List<String> fireableTransitions = transitions.entrySet().stream()
 	            .filter(entry -> entry.getValue().isFireable())
 	            .map(Map.Entry::getKey)
