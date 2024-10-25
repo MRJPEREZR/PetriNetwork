@@ -10,11 +10,13 @@ public class Transition {
 	private List<InArc> inArcs;
 	private List<OutArc> outArcs;
 	private String label;
+	private Boolean isFireable;
 
 	public Transition(String label) {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;
+		this.isFireable = false;
 	}
 	
 	public void setLabel(String label) {
@@ -49,6 +51,7 @@ public class Transition {
 	public void addOutArc(OutArc outArc) throws RepeatedArc {
 		if (!existedArc(this.outArcs, outArc)) {
 			this.outArcs.add(outArc);
+			updateIsFireable();
 		} else {
 			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
@@ -60,15 +63,20 @@ public class Transition {
 
 	public void rmOutArc(OutArc outArc) {
 		this.outArcs.remove(outArc);
+		updateIsFireable();
+	}
+	
+	public Boolean isFireable() {
+		return this.isFireable;
 	}
 
-	public Boolean isFireable() {
-		this.outArcs.stream().forEach(OutArc::setIsActive);
-        return outArcs.stream().anyMatch(arc -> arc.getIsActive());
+	public void updateIsFireable() {
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.getIsActive()) || (outArcs.size() == 0 && inArcs.size() != 1);
     }
 
 	public void fire() {
-		if (isFireable()) {
+		updateIsFireable();
+		if (isFireable) {
 			System.out.println("Firing ...");
 			outArcs.stream().forEach(arg0 -> {
 				try {
@@ -84,6 +92,7 @@ public class Transition {
 					e.printStackTrace();
 				}
 			});
+			outArcs.stream().forEach(OutArc::isActive);
 		} else {
 			System.out.println("Transition is not fireable");
 		}

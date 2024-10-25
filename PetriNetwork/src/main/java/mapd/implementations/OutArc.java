@@ -8,21 +8,21 @@ public class OutArc extends Arc {
 
 	protected Boolean isActive;
 
-	public OutArc(String label, Place place) {
+	public OutArc(String label, Place place) throws InvalidWeightNumber {
 		super(label, place);
-		setIsActive();
+		this.isActive();
 	}
 
 	public OutArc(String label, Place place, int weight) throws InvalidWeightNumber {
 		super(label, place, weight);
-		setIsActive();
+		this.isActive();
 	}
 
 	public Boolean getIsActive() {
 		return isActive;
 	}
 
-	public void setIsActive() {
+	public void isActive() {
 		this.isActive = this.getPlace().getTokens() - this.getWeight() >= 0;
 	}
 
@@ -31,13 +31,18 @@ public class OutArc extends Arc {
 		Place currentPlace = this.getPlace();
 		if (isActive) {
 			currentPlace.setTokens(currentPlace.getTokens() - this.getWeight());
-			this.setIsActive();
 		}
 	}
 
 	@Override
     public void addToTransition(Transition transition) throws RepeatedArc {
         transition.addOutArc(this);
+    }
+	
+	@Override
+    public void setWeight(int weight) throws InvalidWeightNumber {
+        super.setWeight(weight);
+        this.isActive();
     }
 
 	@Override

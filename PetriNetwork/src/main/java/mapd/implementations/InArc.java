@@ -6,7 +6,7 @@ import mapd.exceptions.RepeatedArc;
 
 public class InArc extends Arc {
 
-	public InArc(String label, Place place) {
+	public InArc(String label, Place place) throws InvalidWeightNumber {
 		super(label, place);
 	}
 

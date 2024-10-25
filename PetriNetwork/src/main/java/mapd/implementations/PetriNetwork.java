@@ -82,9 +82,10 @@ public class PetriNetwork implements IPetriNetwork {
 	 * 
 	 * @param label The unique identifier for the Place to be added.
 	 * @throws RepeatedNameElement If a Place with the specified label already exists in the network.
+	 * @throws InvalidTokenNumber 
 	 */
 	@Override
-	public void addPlace(String label) throws RepeatedNameElement {
+	public void addPlace(String label) throws RepeatedNameElement, ElementNameNotExists, InvalidTokenNumber {
 		if (!this.places.containsKey(label)) {
 			Place place = new Place(label);
 			this.places.put(label, place);
@@ -349,6 +350,7 @@ public class PetriNetwork implements IPetriNetwork {
 		showPlaces();
 		
 		getTransition(label).fire();
+		updateTransitions();
 		
 		System.out.println("After fire transition");
 		showPlaces();
@@ -424,6 +426,7 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renamePlace(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Place place = this.getPlace(oldName);
 		if (place != null && !this.places.containsKey(newName)) {
+			place.setLabel(newName);
 			this.places.remove(oldName);
 			places.put(newName, place);
 		} else {
@@ -448,6 +451,7 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renameTransition(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Transition transition = this.getTransition(oldName);
 		if (transition != null && !this.transitions.containsKey(newName)) {
+			transition.setLabel(newName);
 			this.transitions.remove(oldName);
 			this.transitions.put(newName, transition);
 		} else {
@@ -472,11 +476,19 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renameArc(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Arc arc = this.getArc(oldName);
 		if (arc != null && !this.arcs.containsKey(newName)) {
+			arc.setLabel(newName);
 			this.arcs.remove(oldName);
 			this.arcs.put(newName, arc);
 		} else {
 			throw new RepeatedNameElement("New arc name already exists");
 		}
+	}
+	
+	private void updateTransitions() {
+		transitions.forEach((key, transition) -> {
+			transition.updateIsFireable();
+			System.out.println("Transition");
+		});
 	}
 
 }

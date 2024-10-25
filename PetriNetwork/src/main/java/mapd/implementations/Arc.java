@@ -14,10 +14,8 @@ public abstract class Arc {
 		return weight >= 1;
 	}
 
-	public Arc(String label, Place place) {
-		this.place = place;
-		this.weight = 1;
-		this.label = label;
+	Arc(String label, Place place) throws InvalidWeightNumber  {
+		this(label, place, 1);
 	}
 
 	public Arc(String label, Place place, int weight) throws InvalidWeightNumber {
@@ -32,10 +30,6 @@ public abstract class Arc {
 
 	public Place getPlace() {
 		return place;
-	}
-
-	public void setPlace(Place place) {
-		this.place = place;
 	}
 
 	public int getWeight() {

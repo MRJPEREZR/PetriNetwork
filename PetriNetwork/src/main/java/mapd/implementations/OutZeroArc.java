@@ -5,18 +5,16 @@ import mapd.exceptions.InvalidWeightNumber;
 
 public class OutZeroArc extends OutArc {
 
-	public OutZeroArc(String label, Place place) {
-		super(label, place);
-		setIsActive();
+	OutZeroArc(String label, Place place) throws InvalidWeightNumber {
+		this(label, place, 0);
 	}
 
 	public OutZeroArc(String label, Place place, int weight) throws InvalidWeightNumber {
 		super(label, place, weight);
-		setIsActive();
 	}
 
 	@Override
-	public void setIsActive() {
+	public void isActive() {
 		this.isActive = this.getPlace().getTokens() == 0; 
 	}
 
