@@ -77,7 +77,6 @@ public class Transition {
 					e.printStackTrace();
 				}
 			});
-			outArcs.stream().forEach(OutArc::setIsActive);
 			inArcs.stream().forEach(arg0 -> {
 				try {
 					arg0.modifyTokens();

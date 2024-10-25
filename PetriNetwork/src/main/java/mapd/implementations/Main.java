@@ -26,6 +26,7 @@ public class Main {
 			net.addArc("a3_out", "t1", "p3", "out");
 			net.addArc("a4_out", "t4", "p4", "out");
 			net.addArc("a5_out", "t3", "p5", "out");
+			net.addArc("a6_out", "t3", "p3", "out");
 			
 			//In Arcs (having place as a reference)
 			net.addArc("a1_in", "t2", "p1", "in");
@@ -33,6 +34,7 @@ public class Main {
 			net.addArc("a3_in", "t2", "p3", "in");
 			net.addArc("a4_in", "t3", "p4", "in");
 			net.addArc("a5_in", "t4", "p5", "in");
+			net.addArc("a6_in", "t4", "p3", "in");
 			
 			net.showAllElements();
 			

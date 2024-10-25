@@ -31,7 +31,7 @@ public class PetriNetwork implements IPetriNetwork {
 	 *   <li>records: An ArrayList to store lists of strings, which might represent logs or history of the network's state changes.</li>
 	 * </ul>
 	 */
-	PetriNetwork() {
+	public PetriNetwork() {
 		this.places = new HashMap<String, Place>();
 		this.transitions = new HashMap<String, Transition>();
 		this.arcs = new HashMap<String, Arc>();
