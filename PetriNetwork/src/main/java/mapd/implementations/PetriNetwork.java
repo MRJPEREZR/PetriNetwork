@@ -121,6 +121,12 @@ public class PetriNetwork implements IPetriNetwork {
 	public void rmPlace(String label) throws ElementNameNotExists {
 		Place place = this.getPlace(label);
 		if (place != null) {
+			List<String> arcLabels = this.arcs.entrySet()
+					.stream()
+					.filter(entry -> entry.getValue().getPlace().getLabel().equals(label))
+					.map(Map.Entry::getKey)
+					.collect(Collectors.toList());
+			arcLabels.forEach((arcLabel) -> {this.arcs.remove(arcLabel);});
 			this.places.remove(label);
 		}
 	}
@@ -178,6 +184,16 @@ public class PetriNetwork implements IPetriNetwork {
 	public void rmTransition(String label) throws ElementNameNotExists {
 		Transition transition = this.getTransition(label);
 		if (transition != null) {
+			List<String> inArcLabels = transition.getInArcs()
+					.stream()
+					.map(InArc::getLabel)
+					.collect(Collectors.toList());
+			inArcLabels.forEach((arcLabel) -> {this.arcs.remove(arcLabel);});
+			List<String> outArcLabels = transition.getOutArcs()
+					.stream()
+					.map(OutArc::getLabel)
+					.collect(Collectors.toList());
+			outArcLabels.forEach((arcLabel) -> {this.arcs.remove(arcLabel);});
 			this.transitions.remove(label);
 		}
 	}

@@ -86,6 +86,16 @@ public class SimpleNetworkTest {
 		});
 	}
 	
+	@Test
+	public void testRemovePlace() throws RepeatedNameElement, InvalidWeightNumber, RepeatedArc, ElementNameNotExists, InvalidTokenNumber {
+		setup();
+		assertThrows(ElementNameNotExists.class, () -> {
+			net.setPlaceTokens("placeNotExist", 3);
+		});
+	}
+	
+	
+	
 	
 	
 
