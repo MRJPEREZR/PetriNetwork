@@ -12,7 +12,6 @@ import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 import mapd.implementations.OutArc;
-import mapd.implementations.OutBouncerArc;
 import mapd.implementations.OutZeroArc;
 import mapd.implementations.Place;
 import mapd.implementations.Transition;
