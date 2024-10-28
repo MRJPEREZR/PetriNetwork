@@ -8,22 +8,22 @@ public class OutArc extends Arc {
 
 	protected Boolean isActive;
 
-	public OutArc(String label, Place place) throws InvalidWeightNumber {
-		super(label, place);
-		this.isActive();
+	public OutArc(String label, Place place, Transition transition) throws InvalidWeightNumber, RepeatedArc {
+		this(label, place, transition, 1);
 	}
 
-	public OutArc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public OutArc(String label, Place place, Transition transition, int weight) throws InvalidWeightNumber, RepeatedArc {
 		super(label, place, weight);
-		this.isActive();
+		this.updateIsActive();
+		addToTransition(transition);
 	}
 
-	public Boolean getIsActive() {
+	public Boolean isActive() {
 		return isActive;
 	}
 
-	public void isActive() {
-		this.isActive = this.getPlace().getTokens() - this.getWeight() >= 0;
+	public void updateIsActive() {
+		isActive = this.getPlace().getTokens() - this.getWeight() >= 0;
 	}
 
 	@Override
@@ -31,6 +31,7 @@ public class OutArc extends Arc {
 		Place currentPlace = this.getPlace();
 		if (isActive) {
 			currentPlace.setTokens(currentPlace.getTokens() - this.getWeight());
+			this.updateIsActive();
 		}
 	}
 
@@ -42,12 +43,12 @@ public class OutArc extends Arc {
 	@Override
     public void setWeight(int weight) throws InvalidWeightNumber {
         super.setWeight(weight);
-        this.isActive();
+        this.updateIsActive();
     }
 
 	@Override
 	public String toString() {
-		return "Conventional out arc has weight " + this.getWeight() + " and it is " + this.getIsActive();
+		return "Conventional out arc has weight " + this.getWeight() + " and it is " + this.isActive();
 	}
 
 }

@@ -71,11 +71,11 @@ public class Transition {
 	}
 
 	public void updateIsFireable() {
-        this.isFireable = outArcs.stream().anyMatch(arc -> arc.getIsActive()) || (outArcs.size() == 0 && inArcs.size() != 1);
+		outArcs.stream().forEach(OutArc::updateIsActive);
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.isActive()) || (outArcs.size() == 0 && inArcs.size() != 1);
     }
 
 	public void fire() {
-		updateIsFireable();
 		if (isFireable) {
 			System.out.println("Firing ...");
 			outArcs.stream().forEach(arg0 -> {
@@ -92,7 +92,7 @@ public class Transition {
 					e.printStackTrace();
 				}
 			});
-			outArcs.stream().forEach(OutArc::isActive);
+			updateIsFireable();
 		} else {
 			System.out.println("Transition is not fireable");
 		}

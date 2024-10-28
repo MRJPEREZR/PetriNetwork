@@ -7,6 +7,7 @@ import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 import mapd.exceptions.InvalidTokenNumber;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,59 +24,75 @@ class OutArcTest {
     }
 
     @Test
-    void testOutArcCreationWithDefaultWeight() throws InvalidWeightNumber {
-        OutArc outArc = new OutArc("a1", testPlace);
+    @Order(1)
+    void testOutArcCreationWithDefaultWeight() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition);
         assertEquals(testPlace, outArc.getPlace());
         assertEquals(1, outArc.getWeight());
-        assertTrue(outArc.getIsActive());
+        assertTrue(outArc.isActive());
     }
 
     @Test
-    void testOutArcCreationWithValidWeight() throws InvalidWeightNumber {
-        OutArc outArc = new OutArc("a1", testPlace, 3);
+    @Order(2)
+    void testOutArcCreationWithValidWeight() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition, 3);
         assertEquals(testPlace, outArc.getPlace());
         assertEquals(3, outArc.getWeight());
-        assertTrue(outArc.getIsActive());
+        assertTrue(outArc.isActive());
     }
 
     @Test
+    @Order(3)
     void testOutArcCreationWithInvalidWeight() {
         InvalidWeightNumber thrown = assertThrows(InvalidWeightNumber.class, () -> {
-            new OutArc("a1", testPlace, 0);
+            new OutArc("a1", testPlace, testTransition, 0);
         });
         assertEquals("Invalid weight < 1", thrown.getMessage());
     }
 
     @Test
-    void testIsActiveWhenTokensAreNotEnough() throws InvalidWeightNumber {
-        OutArc outArc = new OutArc("a1", testPlace, 6);
-        assertFalse(outArc.getIsActive());
+    @Order(4)
+    void testIsActiveWhenTokensAreNotEnough() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition, 6);
+        assertFalse(outArc.isActive());
     }
 
     @Test
-    void testModifyTokensWhenActive() throws InvalidTokenNumber, InvalidWeightNumber {
-        OutArc outArc = new OutArc("a1", testPlace, 2);
+    @Order(5)
+    void testModifyTokensWhenActive() throws InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition, 2);
         outArc.modifyTokens();
         assertEquals(3, testPlace.getTokens());
     }
 
     @Test
-    void testModifyTokensWhenNotActive() throws InvalidWeightNumber, InvalidTokenNumber {
-        OutArc outArc = new OutArc("a1", testPlace, 6);
+    @Order(6)
+    void testModifyTokensWhenNotActive() throws InvalidWeightNumber, InvalidTokenNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition, 6);
         outArc.modifyTokens();
         assertEquals(5, testPlace.getTokens());
     }
 
     @Test
+    @Order(7)
     void testAddToTransition() throws RepeatedArc, InvalidWeightNumber {
-        OutArc outArc = new OutArc("a1", testPlace);
-        outArc.addToTransition(testTransition);
+        OutArc outArc = new OutArc("a1", testPlace, testTransition);
         assertTrue(testTransition.getOutArcs().contains(outArc));
     }
 
     @Test
-    void testToString() throws InvalidWeightNumber {
-        OutArc outArc = new OutArc("a1", testPlace, 4);
+    @Order(8)
+    void testToString() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition, 4);
         assertTrue(outArc.toString().equals("Conventional out arc has weight 4 and it is true"));
+    }
+    
+    @Test
+    @Order(9)
+    void testModifyTokensNoValidAfter() throws InvalidWeightNumber, InvalidTokenNumber, RepeatedArc {
+        OutArc outArc = new OutArc("a1", testPlace, testTransition, 3);
+        outArc.modifyTokens();
+        outArc.modifyTokens();
+        assertFalse(outArc.isActive());
     }
 }

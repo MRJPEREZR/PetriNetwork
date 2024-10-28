@@ -14,11 +14,11 @@ public abstract class Arc {
 		return weight >= 1;
 	}
 
-	Arc(String label, Place place) throws InvalidWeightNumber  {
+	Arc(String label, Place place) throws InvalidWeightNumber, RepeatedArc  {
 		this(label, place, 1);
 	}
 
-	public Arc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public Arc(String label, Place place, int weight) throws InvalidWeightNumber, RepeatedArc {
 		this.place = place;
 		this.label = label;
 		if (isValidWeight(weight)) {

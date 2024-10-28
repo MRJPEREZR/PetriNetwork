@@ -211,19 +211,20 @@ public class PetriNetwork implements IPetriNetwork {
 	 * @param newWeight The weight of the Arc. If null, the default weight of 1 is used.
 	 * @return The newly created Arc of the specified type.
 	 * @throws InvalidWeightNumber   If the provided weight is invalid (e.g., negative).
+	 * @throws RepeatedArc 
 	 * @throws IllegalArgumentException If the specified arc type is not recognized.
 	 */
-	private Arc createArc(String label, String type, Place place, Integer newWeight) throws InvalidWeightNumber {
+	private Arc createArc(String label, String type, Place place, Transition transition, Integer newWeight) throws InvalidWeightNumber, RepeatedArc {
 		int weight = (newWeight == null) ? 1 : newWeight;
         switch (type.toLowerCase()) {
             case "in":
-                return new InArc(label, place, weight);
+                return new InArc(label, place, transition, weight);
             case "out":
-                return new OutArc(label, place, weight);
+                return new OutArc(label, place, transition, weight);
             case "outzero":
-                return new OutZeroArc(label, place, weight);
+                return new OutZeroArc(label, place, transition, weight);
             case "outbouncer":
-                return new OutBouncerArc(label, place, weight);
+                return new OutBouncerArc(label, place, transition, weight);
             default:
             	throw new IllegalArgumentException("No valid " + type + " arc type");
         }
@@ -253,8 +254,7 @@ public class PetriNetwork implements IPetriNetwork {
 		if (!this.arcs.containsKey(label)) {
 			Place place = this.getPlace(placeLabel);
 			Transition transition = this.getTransition(transitionLabel);
-			Arc arc = createArc(label, type, place, weight);
-			arc.addToTransition(transition);
+			Arc arc = createArc(label, type, place, transition, weight);
 			this.arcs.put(label, arc);
 		} else {
 			throw new RepeatedNameElement("An arc already exists with this name");
@@ -267,8 +267,8 @@ public class PetriNetwork implements IPetriNetwork {
 		if (!this.arcs.containsKey(label)) {
 			Place place = this.getPlace(placeLabel);
 			Transition transition = this.getTransition(transitionLabel);
-			Arc arc = createArc(label, type, place, null);
-			arc.addToTransition(transition);
+			
+			Arc arc = createArc(label, type, place, transition, null);
 			this.arcs.put(label, arc);
 		} else {
 			throw new RepeatedNameElement("An arc already exists with this name");
@@ -487,7 +487,6 @@ public class PetriNetwork implements IPetriNetwork {
 	private void updateTransitions() {
 		transitions.forEach((key, transition) -> {
 			transition.updateIsFireable();
-			System.out.println("Transition");
 		});
 	}
 

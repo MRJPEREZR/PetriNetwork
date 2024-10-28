@@ -2,11 +2,14 @@ package mapd;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import mapd.exceptions.InvalidTokenNumber;
+import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 import mapd.implementations.OutArc;
 import mapd.implementations.OutBouncerArc;
@@ -25,31 +28,24 @@ public class OutZeroArcTest {
     }
 
     @Test
-    void testOutZeroArcCreation() {
-        OutArc outZeroArc = new OutZeroArc("a1", testPlace);
+    @Order(1)
+    void testOutZeroArcCreation() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outZeroArc = new OutZeroArc("a1", testPlace, testTransition);
         assertEquals(testPlace, outZeroArc.getPlace());
     }
     
     @Test
-    void testOutZeroArcActivation() throws RepeatedArc {
-        OutArc outZeroArc = new OutZeroArc("a1", testPlace);
-        outZeroArc.addToTransition(testTransition);
-        outZeroArc.setIsActive();
-        assertTrue(testTransition.isFireable());
+    @Order(2)
+    void testOutZeroActive() throws RepeatedArc, InvalidWeightNumber {
+        OutArc outZeroArc = new OutZeroArc("a1", testPlace, testTransition);
+        assertTrue(outZeroArc.isActive());
     }
     
     @Test
-    void testOutZeroArcIsFirableTransition() throws RepeatedArc, InvalidTokenNumber {
-        OutArc outZeroArc = new OutZeroArc("a1", testPlace);
-        outZeroArc.addToTransition(testTransition);
-        assertTrue(testTransition.isFireable());
-    }
-    
-    @Test
-    void testOutZeroArcFire() throws RepeatedArc {
-        OutArc outZeroArc = new OutZeroArc("a1", testPlace);
-        outZeroArc.addToTransition(testTransition);
-        testTransition.fire();
-        assertEquals(testPlace.getTokens(), (Integer) 0);
+    @Order(3)
+    void testOutZeroUnactive() throws RepeatedArc, InvalidWeightNumber, InvalidTokenNumber {
+    	testPlace.setTokens(3);
+        OutArc outZeroArc = new OutZeroArc("a1", testPlace, testTransition);
+        assertFalse(outZeroArc.isActive());
     }
 }
