@@ -219,5 +219,21 @@ public class PetriNetworkTest {
         });
         assertEquals("No valid inBouncer arc type", thrown.getMessage());
     }
+    
+    @Test
+    @Order(22)
+    public void testGetTransitionsIsNotEmpty() throws RepeatedNameElement {
+    	petriNetwork.addTransition("T1");
+    	assertTrue(!petriNetwork.getTransitions().isEmpty());
+    }
+    
+    @Test
+    @Order(23)
+    public void testGetArcsIsNotEmpty() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
+    	petriNetwork.addPlace("P1", 3);
+        petriNetwork.addTransition("T1");
+        petriNetwork.addArc("A2", "T1", "P1", "outbouncer");
+    	assertTrue(!petriNetwork.getArcs().isEmpty());
+    }
 
 }
