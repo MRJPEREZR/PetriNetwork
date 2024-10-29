@@ -53,8 +53,8 @@ public class PlaceTest {
 
     @Test 
     public void testToString() throws InvalidTokenNumber {
-        assertTrue(place.toString().equals("Place has 0 tokens"));
+        assertTrue(place.toString().equals("place with 0 tokens"));
         place.setTokens(15);
-        assertTrue(place.toString().equals("Place has 15 tokens"));
+        assertTrue(place.toString().equals("place with 15 tokens"));
     }
 }

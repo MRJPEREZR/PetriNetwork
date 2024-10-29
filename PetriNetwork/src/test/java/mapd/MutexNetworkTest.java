@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import mapd.exceptions.ElementNameNotExists;
 import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.NoFireableTransition;
 import mapd.exceptions.RepeatedArc;
 import mapd.exceptions.RepeatedNameElement;
 import mapd.implementations.PetriNetwork;
@@ -74,7 +75,7 @@ public class MutexNetworkTest {
 
 	@Test
 	@Order(3)
-	public void testRunTransition2() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+	public void testRunTransition2() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, NoFireableTransition {
 		net.fire("t2");
 		assertEquals(net.getPlace("p1").getTokens(), (Integer) 1);
 		assertEquals(net.getPlace("p2").getTokens(), (Integer) 0);
@@ -89,7 +90,7 @@ public class MutexNetworkTest {
 
 	@Test
 	@Order(4)
-	public void testRunTransition3() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+	public void testRunTransition3() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, NoFireableTransition {
 		net.fire("t2");
 		net.fire("t3");
 		assertEquals(net.getPlace("p1").getTokens(), (Integer) 1);
@@ -105,7 +106,7 @@ public class MutexNetworkTest {
 	
 	@Test
 	@Order(5)
-	public void testRunTransition4() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+	public void testRunTransition4() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, NoFireableTransition {
 		net.fire("t2");
 		net.fire("t3");
 		net.fire("t4");
@@ -122,7 +123,7 @@ public class MutexNetworkTest {
 	
 	@Test
 	@Order(6)
-	public void testRunTransition1() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+	public void testRunTransition1() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, NoFireableTransition {
 		net.fire("t2");
 		net.fire("t3");
 		net.fire("t4");

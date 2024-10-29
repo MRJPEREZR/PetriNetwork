@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import mapd.implementations.*;
 import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.NoFireableTransition;
 import mapd.exceptions.RepeatedArc;
 
 public class TransitionTest {
@@ -95,7 +96,7 @@ public class TransitionTest {
 
     @Test
     @Order(9)
-    public void testFireWhenFireable() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber {
+    public void testFireWhenFireable() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber, NoFireableTransition {
     	this.place.setTokens(1);
     	Place place2 = new Place("p2");
     	inArc = new InArc("a1", place2, transition);
@@ -109,18 +110,38 @@ public class TransitionTest {
     
     @Test
     @Order(10)
-    public void testFireWhenFireableAndNotHaveOutArcs() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber {
+    public void testFireWhenFireableAndNotHaveOutArcs() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber, NoFireableTransition {
     	inArc = new InArc("a1", place, transition);
     	assertTrue(transition.isFireable());
         transition.fire();
         assertEquals(1, transition.getInArcs().get(0).getPlace().getTokens());
     }
 
-
     @Test
     @Order(11)
     public void testToString() {
-        String expected = "InArcs: " + transition.getInArcs() + "OutArcs: " + transition.getOutArcs();
+        String expected = "t1, 0 in arcs, 0 out arcs";
         assertTrue(transition.toString().equals(expected));
+    }
+    
+    @Test
+    @Order(12)
+    public void testZeroArcFireDoesNotChangeTokens() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber, NoFireableTransition {
+        place = new Place("p2");
+    	new OutZeroArc("zeroArc", place, transition);
+        transition.fire();
+        assertEquals(0, place.getTokens()); 
+        assertTrue(transition.isFireable());
+    }
+
+    @Test
+    @Order(13)
+    public void testFireWithInsufficientTokensThrowsException() throws InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+        this.place.setTokens(0);
+        new OutArc("a2", place, transition);
+        Exception thrown = assertThrows(NoFireableTransition.class, () -> {
+            transition.fire();
+        });
+        assertEquals("Transition is not fireable", thrown.getMessage());
     }
 }

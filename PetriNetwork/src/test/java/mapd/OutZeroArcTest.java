@@ -12,6 +12,7 @@ import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 import mapd.implementations.OutArc;
+import mapd.implementations.OutBouncerArc;
 import mapd.implementations.OutZeroArc;
 import mapd.implementations.Place;
 import mapd.implementations.Transition;
@@ -46,5 +47,12 @@ public class OutZeroArcTest {
     	testPlace.setTokens(3);
         OutArc outZeroArc = new OutZeroArc("a1", testPlace, testTransition);
         assertFalse(outZeroArc.isActive());
+    }
+    
+    @Test
+    @Order(4)
+    void testToString() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outZeroArc = new OutZeroArc("a1", testPlace, testTransition);
+        assertTrue(outZeroArc.toString().equals("zero out arc with weight 1 (from place with 0 tokens to transition)"));
     }
 }

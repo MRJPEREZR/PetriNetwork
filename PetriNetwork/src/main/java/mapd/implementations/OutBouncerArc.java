@@ -69,6 +69,6 @@ public class OutBouncerArc extends OutArc {
      */
     @Override
     public String toString() {
-        return "Bouncer out arc has weight " + this.getWeight() + " and it is " + this.isActive();
+    	return "bouncer out arc with weight " + this.getWeight() + " (from " + this.getPlace().toString() + " to transition)";
     }
 }

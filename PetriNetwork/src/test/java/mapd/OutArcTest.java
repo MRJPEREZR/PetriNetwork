@@ -84,7 +84,7 @@ class OutArcTest {
     @Order(8)
     void testToString() throws InvalidWeightNumber, RepeatedArc {
         OutArc outArc = new OutArc("a1", testPlace, testTransition, 4);
-        assertTrue(outArc.toString().equals("Conventional out arc has weight 4 and it is true"));
+        assertTrue(outArc.toString().equals("simple out arc with weight 4 (from place with 5 tokens to transition)"));
     }
     
     @Test

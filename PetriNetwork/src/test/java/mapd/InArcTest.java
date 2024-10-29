@@ -74,7 +74,7 @@ class InArcTest {
     @Order(7)
     void testToString() throws InvalidWeightNumber, RepeatedArc {
         InArc inArc = new InArc("a1",testPlace, testTransition, 4);
-        assertTrue(inArc.toString().equals("In arc has weight 4"));
+        assertTrue(inArc.toString().equals("simple in arc with weight 4 (transition to place with 5 tokens)"));
     }
     
     @Test

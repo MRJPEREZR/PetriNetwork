@@ -31,7 +31,6 @@ public class OutBouncerArcTest {
     @Order(1)
     void testOutBouncerArcCreation() throws InvalidWeightNumber, RepeatedArc {
         OutArc outBouncerArc = new OutBouncerArc("a1", testPlace, testTransition);
-        System.out.println(outBouncerArc);
         assertEquals(testPlace, outBouncerArc.getPlace());
         assertFalse(outBouncerArc.isActive());
     }
@@ -59,7 +58,7 @@ public class OutBouncerArcTest {
     @Order(4)
     void testToString() throws InvalidWeightNumber, RepeatedArc {
         OutArc outBouncerArc = new OutBouncerArc("a1", testPlace, testTransition);
-        assertTrue(outBouncerArc.toString().equals("Bouncer out arc has weight 1 and it is false"));
+        assertTrue(outBouncerArc.toString().equals("bouncer out arc with weight 1 (from place with 0 tokens to transition)"));
     }
 
 }
