@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import mapd.exceptions.ElementNameNotExists;
@@ -17,9 +19,11 @@ import mapd.implementations.PetriNetwork;
 
 public class MutexNetworkTest {
 	
-	PetriNetwork net = new PetriNetwork();
+	PetriNetwork net = PetriNetwork.getInstance();
 	
+	@BeforeEach
 	public void setup() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
+		net.reset();
 		// Places
 		net.addPlace("p1");
 		net.addPlace("p2", 1);
@@ -51,8 +55,8 @@ public class MutexNetworkTest {
 	}
 	
 	@Test
+	@Order(1)
 	public void testCurrentPlaceTokens() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
-		setup();
 		assertEquals(net.getPlace("p1").getTokens(), (Integer) 0);
 		assertEquals(net.getPlace("p2").getTokens(), (Integer) 1);
 		assertEquals(net.getPlace("p3").getTokens(), (Integer) 0);
@@ -61,16 +65,16 @@ public class MutexNetworkTest {
 	}
 	
 	@Test
+	@Order(2)
 	public void testAvailableTransitions() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		setup();
 		List<String> availableTransitions = net.fireableTransitions();
 		assertTrue(availableTransitions.contains("t2"));
 		assertTrue(availableTransitions.contains("t3"));
 	}
 
 	@Test
+	@Order(3)
 	public void testRunTransition2() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
-		setup();
 		net.fire("t2");
 		assertEquals(net.getPlace("p1").getTokens(), (Integer) 1);
 		assertEquals(net.getPlace("p2").getTokens(), (Integer) 0);
@@ -84,8 +88,8 @@ public class MutexNetworkTest {
 	}
 
 	@Test
+	@Order(4)
 	public void testRunTransition3() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
-		setup();
 		net.fire("t2");
 		net.fire("t3");
 		assertEquals(net.getPlace("p1").getTokens(), (Integer) 1);
@@ -100,8 +104,8 @@ public class MutexNetworkTest {
 	}
 	
 	@Test
+	@Order(5)
 	public void testRunTransition4() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
-		setup();
 		net.fire("t2");
 		net.fire("t3");
 		net.fire("t4");
@@ -117,8 +121,8 @@ public class MutexNetworkTest {
 	}
 	
 	@Test
+	@Order(6)
 	public void testRunTransition1() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
-		setup();
 		net.fire("t2");
 		net.fire("t3");
 		net.fire("t4");
@@ -135,40 +139,40 @@ public class MutexNetworkTest {
 	}
 	
 	@Test
+	@Order(7)
 	public void testRepeatedOutArc() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		setup();
 		assertThrows(RepeatedArc.class, () -> {
 			net.addArc("newOutArc", "t1", "p1", "out");
 		});
 	}
 	
 	@Test
+	@Order(8)
 	public void testRepeatedInArc() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		setup();
 		assertThrows(RepeatedArc.class, () -> {
 			net.addArc("newInArc", "t2", "p1", "in");
 		});
 	}
 	
 	@Test
+	@Order(9)
 	public void testRepeatedNamePlace() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		setup();
 		assertThrows(RepeatedNameElement.class, () -> {
 			net.addPlace("p1");
 		});
 	}
 	
 	@Test
+	@Order(10)
 	public void testRepeatedNameTransition() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		setup();
 		assertThrows(RepeatedNameElement.class, () -> {
 			net.addTransition("t1");
 		});
 	}
 	
 	@Test
+	@Order(11)
 	public void testRepeatedNameArc() throws RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, ElementNameNotExists {
-		setup();
 		assertThrows(RepeatedNameElement.class, () -> {
 			net.addArc("a1_in", "t2", "p1", "in");
 		});

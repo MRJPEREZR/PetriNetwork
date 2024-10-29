@@ -5,7 +5,7 @@ public class Main {
 	public static void main (String[] args) throws Exception {
 		try {
 			// PetriNetwork Mutex topology example
-			PetriNetwork net = new PetriNetwork();
+			PetriNetwork net = PetriNetwork.getInstance();
 			// Places
 			net.addPlace("p1");
 			net.addPlace("p2", 1);
