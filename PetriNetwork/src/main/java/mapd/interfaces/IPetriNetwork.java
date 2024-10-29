@@ -25,7 +25,7 @@ public interface IPetriNetwork {
 	public void showArcs();
 	public void renameArc(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists;
 
-	public void fire(String label) throws ElementNameNotExists;
+	public void fire(String label) throws ElementNameNotExists, NoFireableTransition;
 	public List<String> fireableTransitions();
 	public void showAllElements();
 

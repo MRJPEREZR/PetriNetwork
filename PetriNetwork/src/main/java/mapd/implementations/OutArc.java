@@ -118,6 +118,6 @@ public class OutArc extends Arc {
      */
     @Override
     public String toString() {
-        return "Conventional out arc has weight " + this.getWeight() + " and it is " + this.isActive();
+    	return "simple out arc with weight " + this.getWeight() + " (from " + this.getPlace().toString() + " to transition)";
     }
 }

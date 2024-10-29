@@ -69,6 +69,6 @@ public class InArc extends Arc {
      */
     @Override
     public String toString() {
-        return "In arc has weight " + this.getWeight();
+    	return "simple in arc with weight " + this.getWeight() + " (transition to " + this.getPlace().toString() + ")";
     }
 }

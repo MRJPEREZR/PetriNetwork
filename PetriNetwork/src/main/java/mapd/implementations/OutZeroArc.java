@@ -66,6 +66,6 @@ public class OutZeroArc extends OutArc {
      */
     @Override
     public String toString() {
-        return "Zero out arc has weight " + this.getWeight() + " and it is " + this.isActive();
+        return "zero out arc with weight " + this.getWeight() + " (from " + this.getPlace().toString() + " to transition)";
     }
 }

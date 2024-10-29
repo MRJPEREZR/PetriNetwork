@@ -83,7 +83,7 @@ public class Place {
      */
     @Override
     public String toString() {
-        return "Place has " + this.tokens + " tokens";
+        return "place with " + this.tokens + " tokens";
     }
 
     /**

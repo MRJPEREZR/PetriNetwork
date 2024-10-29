@@ -140,27 +140,25 @@ public class Transition {
      * <p>
      * This method modifies the tokens in both input and output arcs and then
      * updates the fireable status. If the transition is not fireable, a message is printed.
+     * @throws NoFireableTransition 
      */
-    public void fire() {
+    public void fire() throws NoFireableTransition {
         if (isFireable) {
-            System.out.println("Firing ...");
             outArcs.stream().forEach(arc -> {
                 try {
                     arc.modifyTokens();
                 } catch (InvalidTokenNumber e) {
                     e.printStackTrace();
-                }
-            });
+                }});
             inArcs.stream().forEach(arc -> {
                 try {
                     arc.modifyTokens();
                 } catch (InvalidTokenNumber e) {
                     e.printStackTrace();
-                }
-            });
+                }});
             updateIsFireable();
         } else {
-            System.out.println("Transition is not fireable");
+        	throw new NoFireableTransition("Transition is not fireable");
         }
     }
 
@@ -171,7 +169,7 @@ public class Transition {
      */
     @Override
     public String toString() {
-        return "InArcs: " + this.getInArcs() + "OutArcs: " + this.getOutArcs();
+        return this.label + ", " + this.outArcs.size() + " in arcs, " + this.inArcs.size() + " out arcs";
     }
 
     /**

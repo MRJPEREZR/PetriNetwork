@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import mapd.exceptions.ElementNameNotExists;
 import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.NoFireableTransition;
 import mapd.exceptions.RepeatedArc;
 import mapd.exceptions.RepeatedNameElement;
 
@@ -309,9 +310,6 @@ public class PetriNetwork implements IPetriNetwork {
 	            .filter(entry -> entry.getValue().isFireable())
 	            .map(Map.Entry::getKey)
 	            .collect(Collectors.toList());
-		
-		System.out.println(fireableTransitions);
-		
 		return fireableTransitions;
 	}
 
@@ -324,15 +322,12 @@ public class PetriNetwork implements IPetriNetwork {
 	 * 
 	 * @param label The unique identifier of the transition to be fired.
 	 * @throws ElementNameNotExists 
+	 * @throws NoFireableTransition 
 	 */
 	@Override
-	public void fire(String label) throws ElementNameNotExists {
-		System.out.println("Firing Transition " + label);
-		
+	public void fire(String label) throws ElementNameNotExists, NoFireableTransition {		
 		getTransition(label).fire();
 		updateTransitions();
-		
-		System.out.println("After fire transition");
 		showPlaces();
 	}
 	
@@ -381,12 +376,52 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void showAllElements() {
-		System.out.println("Places:");
-		showPlaces();
-		System.out.println("Transitions:");
-		showTransitions();
-		System.out.println("Arcs:");
-		showArcs();
+	    StringBuilder result = new StringBuilder();
+
+	    result.append("Petri Network\n")
+	          .append(this.places.size()).append(" places\n")
+	          .append(this.transitions.size()).append(" transitions\n")
+	          .append(this.arcs.size()).append(" arcs\n");
+
+	    result.append("List of places:\n");
+	    int placeCount = 1;
+	    for (Place place : this.places.values()) {
+	        long entranceArcCount = this.arcs.values().stream()
+	                .filter(arc -> arc instanceof InArc && arc.getPlace().equals(place))
+	                .count();
+	        long exitArcCount = this.arcs.values().stream()
+	                .filter(arc -> arc instanceof OutArc && !(arc instanceof OutBouncerArc) && !(arc instanceof OutZeroArc) && arc.getPlace().equals(place))
+	                .count();
+	        long bouncerExitArcCount = this.arcs.values().stream()
+	                .filter(arc -> arc instanceof OutBouncerArc && arc.getPlace().equals(place))
+	                .count();
+	        long zeroExitArcCount = this.arcs.values().stream()
+	                .filter(arc -> arc instanceof OutZeroArc && arc.getPlace().equals(place))
+	                .count();
+
+	        result.append(placeCount).append(": ").append(place.toString())
+	              .append(", ").append(exitArcCount).append(" simple out arcs, ")
+	              .append(entranceArcCount).append(" in arcs, ")
+	              .append(bouncerExitArcCount).append(" bouncer out arcs, ")
+	              .append(zeroExitArcCount).append(" zero out arcs\n");
+	        placeCount++;
+	    }
+
+	    result.append("List of transitions:\n");
+	    int transitionCount = 1;
+	    for (Transition transition : this.transitions.values()) {
+	        result.append(transitionCount).append(": ").append(transition.toString()).append("\n");
+	        transitionCount++;
+	    }
+
+	    result.append("List of arcs:\n");
+	    int arcCount = 1;
+	    for (Arc arc : this.arcs.values()) {
+	        result.append(arcCount).append(": ").append(arc.toString()).append("\n");
+	        arcCount++;
+	    }
+
+	    System.out.println(result.toString());
 	}
 	
 	/**

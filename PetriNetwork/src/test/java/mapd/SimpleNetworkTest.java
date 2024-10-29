@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import mapd.exceptions.ElementNameNotExists;
 import mapd.exceptions.InvalidTokenNumber;
 import mapd.exceptions.InvalidWeightNumber;
+import mapd.exceptions.NoFireableTransition;
 import mapd.exceptions.RepeatedArc;
 import mapd.exceptions.RepeatedNameElement;
 import mapd.implementations.PetriNetwork;
@@ -56,7 +57,7 @@ public class SimpleNetworkTest {
 	
 	@Test
 	@Order(3)
-	public void testRunTransition1() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+	public void testRunTransition1() throws ElementNameNotExists, RepeatedNameElement, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc, NoFireableTransition {
 		net.fire("t1");
 		assertEquals(net.getPlace("p1").getTokens(), (Integer) 0);
 		assertEquals(net.getPlace("p2").getTokens(), (Integer) 1);
