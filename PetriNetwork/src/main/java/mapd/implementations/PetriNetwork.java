@@ -14,11 +14,13 @@ import mapd.exceptions.RepeatedArc;
 import mapd.exceptions.RepeatedNameElement;
 
 public class PetriNetwork implements IPetriNetwork {
+	
+	private static PetriNetwork instance;
 
 	private HashMap<String, Place> places; 
 	private HashMap<String, Transition> transitions;
 	private HashMap<String, Arc> arcs;
-
+	
 	/**
 	 * Default constructor for the PetriNetwork class.
 	 * <p>
@@ -31,20 +33,62 @@ public class PetriNetwork implements IPetriNetwork {
 	 *   <li>records: An ArrayList to store lists of strings, which might represent logs or history of the network's state changes.</li>
 	 * </ul>
 	 */
-	public PetriNetwork() {
+	private PetriNetwork() {
 		this.places = new HashMap<String, Place>();
 		this.transitions = new HashMap<String, Transition>();
 		this.arcs = new HashMap<String, Arc>();
 	}
+	
+	/**
+     * Retrieves the singleton instance of the PetriNetwork.
+     * <p>
+     * If the instance does not exist, it creates a new instance.
+     * Ensures only one instance of PetriNetwork is present in the application.
+     *
+     * @return The singleton instance of PetriNetwork.
+     */
+	public static synchronized PetriNetwork getInstance() {
+        if (instance == null) {
+            instance = new PetriNetwork();
+        }
+        return instance;
+    }
+	
+	/**
+     * Resets the Petri network by clearing all places, transitions, and arcs.
+     * <p>
+     * This method is useful for setting up a clean state, especially for testing purposes.
+     */
+	
+	public void reset() {
+        this.places.clear();
+        this.transitions.clear();
+        this.arcs.clear();
+    }
 
+	/**
+     * Returns the collection of Place objects in the network.
+     *
+     * @return HashMap of Place objects indexed by their unique labels.
+     */
 	public HashMap<String, Place> getPlaces() {
 		return places;
 	}
-
+	
+	/**
+     * Returns the collection of Transition objects in the network.
+     *
+     * @return HashMap of Transition objects indexed by their unique labels.
+     */
 	public HashMap<String, Transition> getTransitions() {
 		return transitions;
 	}
 
+	/**
+     * Returns the collection of Arc objects in the network.
+     *
+     * @return HashMap of Arc objects indexed by their unique labels.
+     */
 	public HashMap<String, Arc> getArcs() {
 		return arcs;
 	}
@@ -170,6 +214,18 @@ public class PetriNetwork implements IPetriNetwork {
 		} else {
 			throw new RepeatedNameElement("A transition already exists with this name");
 		}
+	}
+	
+	/**
+     * Updates the fireable status of each transition in the network.
+     * <p>
+     * This method checks and updates each transition to determine whether it is currently fireable
+     * based on the state of the associated places and arcs.
+     */
+	private void updateTransitions() {
+		transitions.forEach((key, transition) -> {
+			transition.updateIsFireable();
+		});
 	}
 
 	/**
@@ -314,9 +370,6 @@ public class PetriNetwork implements IPetriNetwork {
 	@Override
 	public void fire(String label) throws ElementNameNotExists {
 		System.out.println("Firing Transition " + label);
-
-		System.out.println("Before fire transition");
-		showPlaces();
 		
 		getTransition(label).fire();
 		updateTransitions();
@@ -483,11 +536,4 @@ public class PetriNetwork implements IPetriNetwork {
             	throw new IllegalArgumentException("No valid " + type + " arc type");
         }
     }
-
-	private void updateTransitions() {
-		transitions.forEach((key, transition) -> {
-			transition.updateIsFireable();
-		});
-	}
-
 }

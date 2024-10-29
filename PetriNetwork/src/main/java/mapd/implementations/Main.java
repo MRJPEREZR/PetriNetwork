@@ -5,7 +5,7 @@ public class Main {
 	public static void main (String[] args) throws Exception {
 		try {
 			// PetriNetwork Mutex topology example
-			PetriNetwork net = new PetriNetwork();
+			PetriNetwork net = PetriNetwork.getInstance();
 			// Places
 			net.addPlace("p1");
 			net.addPlace("p2", 1);
@@ -36,10 +36,7 @@ public class Main {
 			net.addArc("a6_in", "t4", "p3", "in");
 			
 			net.showAllElements();
-			net.rmPlace("p1");
-			net.rmTransition("t1");
-			net.showAllElements();
-			/*
+			
 			net.fireableTransitions();
 			net.fire("t2");
 			net.fireableTransitions();
@@ -49,7 +46,6 @@ public class Main {
 			net.fireableTransitions();
 			net.fire("t1");
 			net.fireableTransitions();
-			*/
 			
 		}catch(Exception error) {
 			System.err.println("Error: " + error.getMessage());
