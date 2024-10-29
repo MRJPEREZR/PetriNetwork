@@ -27,11 +27,6 @@ public class Transition {
 		return label;
 	}
 
-	private Boolean existedArc(List<? extends Arc> arcs, Arc newArc) {
-		Place place = newArc.getPlace();
-        return arcs.stream().anyMatch(arc -> arc.getPlace().getLabel().equals(place.getLabel()));
-	}
-
 	public List<InArc> getInArcs() {
 		return inArcs;
 	}
@@ -102,6 +97,11 @@ public class Transition {
 	@Override
 	public String toString () {
 		return "InArcs: " + this.getInArcs() + "OutArcs: " + this.getOutArcs();
+	}
+
+	private Boolean existedArc(List<? extends Arc> arcs, Arc newArc) {
+		Place place = newArc.getPlace();
+        return arcs.stream().anyMatch(arc -> arc.getPlace().getLabel().equals(place.getLabel()));
 	}
 
 }

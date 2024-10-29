@@ -6,11 +6,7 @@ public class Place {
 	
 	private Integer tokens;
 	private String label;
-	
-	private Boolean isValidTokens(Integer tokens) {
-		return tokens >= 0;
-	}
-	
+
 	public Place(String label) throws InvalidTokenNumber {
 		this(label, 0);
 	}
@@ -48,4 +44,9 @@ public class Place {
 	public String toString() {
 		return "Place has " + this.tokens + " tokens";
 	}
+
+	private Boolean isValidTokens(Integer tokens) {
+		return tokens >= 0;
+	}
+
 }

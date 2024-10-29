@@ -200,37 +200,6 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 	
 	/**
-	 * Creates a new Arc object of the specified type, associated with a given Place and weight.
-	 * <p>
-	 * This method constructs an Arc based on the provided type (e.g., "in", "out", "outzero", "outbouncer"), 
-	 * associating it with the specified Place and weight. If the weight is not provided (i.e., null), 
-	 * a default weight of 1 is used. If the type is invalid, an exception is thrown.
-	 * 
-	 * @param type      The type of the Arc to be created (e.g., "in", "out", "outzero", "outbouncer").
-	 * @param place     The Place object to which the Arc will be associated.
-	 * @param newWeight The weight of the Arc. If null, the default weight of 1 is used.
-	 * @return The newly created Arc of the specified type.
-	 * @throws InvalidWeightNumber   If the provided weight is invalid (e.g., negative).
-	 * @throws RepeatedArc 
-	 * @throws IllegalArgumentException If the specified arc type is not recognized.
-	 */
-	private Arc createArc(String label, String type, Place place, Transition transition, Integer newWeight) throws InvalidWeightNumber, RepeatedArc {
-		int weight = (newWeight == null) ? 1 : newWeight;
-        switch (type.toLowerCase()) {
-            case "in":
-                return new InArc(label, place, transition, weight);
-            case "out":
-                return new OutArc(label, place, transition, weight);
-            case "outzero":
-                return new OutZeroArc(label, place, transition, weight);
-            case "outbouncer":
-                return new OutBouncerArc(label, place, transition, weight);
-            default:
-            	throw new IllegalArgumentException("No valid " + type + " arc type");
-        }
-    }
-	
-	/**
 	 * Adds a new Arc to the Petri network, linking a specified Transition and Place.
 	 * <p>
 	 * This method creates an Arc of the given type between the specified Transition and Place,
@@ -484,6 +453,37 @@ public class PetriNetwork implements IPetriNetwork {
 		}
 	}
 	
+	/**
+	 * Creates a new Arc object of the specified type, associated with a given Place and weight.
+	 * <p>
+	 * This method constructs an Arc based on the provided type (e.g., "in", "out", "outzero", "outbouncer"), 
+	 * associating it with the specified Place and weight. If the weight is not provided (i.e., null), 
+	 * a default weight of 1 is used. If the type is invalid, an exception is thrown.
+	 * 
+	 * @param type      The type of the Arc to be created (e.g., "in", "out", "outzero", "outbouncer").
+	 * @param place     The Place object to which the Arc will be associated.
+	 * @param newWeight The weight of the Arc. If null, the default weight of 1 is used.
+	 * @return The newly created Arc of the specified type.
+	 * @throws InvalidWeightNumber   If the provided weight is invalid (e.g., negative).
+	 * @throws RepeatedArc 
+	 * @throws IllegalArgumentException If the specified arc type is not recognized.
+	 */
+	private Arc createArc(String label, String type, Place place, Transition transition, Integer newWeight) throws InvalidWeightNumber, RepeatedArc {
+		int weight = (newWeight == null) ? 1 : newWeight;
+        switch (type.toLowerCase()) {
+            case "in":
+                return new InArc(label, place, transition, weight);
+            case "out":
+                return new OutArc(label, place, transition, weight);
+            case "outzero":
+                return new OutZeroArc(label, place, transition, weight);
+            case "outbouncer":
+                return new OutBouncerArc(label, place, transition, weight);
+            default:
+            	throw new IllegalArgumentException("No valid " + type + " arc type");
+        }
+    }
+
 	private void updateTransitions() {
 		transitions.forEach((key, transition) -> {
 			transition.updateIsFireable();
