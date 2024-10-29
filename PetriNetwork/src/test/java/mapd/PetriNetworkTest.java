@@ -69,6 +69,13 @@ public class PetriNetworkTest {
         petriNetwork.addTransition("T1");
         assertEquals("T1", petriNetwork.getTransition("T1").getLabel());
     }
+    
+    @Test
+    public void testRemoveTransitionSuccessfully() throws RepeatedNameElement, ElementNameNotExists {
+        petriNetwork.addTransition("T1");
+        petriNetwork.rmTransition("T1");
+        assertThrows(ElementNameNotExists.class, () -> petriNetwork.getTransition("A1"));
+    }
 
     @Test
     @Order(8)
@@ -134,6 +141,15 @@ public class PetriNetworkTest {
         petriNetwork.renameTransition("T1", "T2");
         assertThrows(ElementNameNotExists.class, () -> petriNetwork.getTransition("T1"));
         assertEquals("T2", petriNetwork.getTransition("T2").getLabel());
+    }
+    
+    @Test
+    public void testRenameArcSuccessfully() throws RepeatedNameElement, ElementNameNotExists, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+    	petriNetwork.addPlace("P1");
+        petriNetwork.addTransition("T1");
+        petriNetwork.addArc("A1", "T1", "P1", "in", 1);
+        petriNetwork.renameArc("A1", "A1*");
+        
     }
 
     @Test
