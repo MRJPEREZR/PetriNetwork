@@ -1,6 +1,8 @@
 package mapd;
 
 import mapd.exceptions.*;
+import mapd.implementations.OutBouncerArc;
+import mapd.implementations.OutZeroArc;
 import mapd.implementations.PetriNetwork;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Order;
@@ -156,6 +158,66 @@ public class PetriNetworkTest {
     @Order(15)
     public void testFireableTransitionsWhenNoTransitionsAreFireable() {
         assertTrue(petriNetwork.fireableTransitions().isEmpty());
+    }
+    
+    @Test
+    @Order(16)
+    public void testRenameArcToExistingNameThrowsException() throws RepeatedNameElement, ElementNameNotExists, InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+        petriNetwork.addPlace("P1");
+        petriNetwork.addTransition("T1");
+        petriNetwork.addArc("A1", "T1", "P1", "in", 1);
+        petriNetwork.addArc("A2", "T1", "P1", "out", 1);
+        assertThrows(RepeatedNameElement.class, () -> petriNetwork.renameArc("A1", "A2"));
+    }
+
+    @Test
+    @Order(17)
+    public void testRenameTransitionToExistingNameThrowsException() throws RepeatedNameElement, ElementNameNotExists {
+        petriNetwork.addTransition("T1");
+        petriNetwork.addTransition("T2");
+        assertThrows(RepeatedNameElement.class, () -> petriNetwork.renameTransition("T1", "T2"));
+    }
+
+    @Test
+    @Order(18)
+    public void testRenamePlaceToExistingNameThrowsException() throws RepeatedNameElement, ElementNameNotExists, InvalidTokenNumber {
+        petriNetwork.addPlace("P1");
+        petriNetwork.addPlace("P2");
+        assertThrows(RepeatedNameElement.class, () -> petriNetwork.renamePlace("P1", "P2"));
+    }
+
+    @Test
+    @Order(19)
+    public void testCreateOutZeroArcAndVerifyInOutArcsList() throws RepeatedNameElement, ElementNameNotExists, InvalidWeightNumber, InvalidTokenNumber, RepeatedArc {
+        petriNetwork.addPlace("P1", 5);
+        petriNetwork.addTransition("T1");
+        petriNetwork.addArc("A1", "T1", "P1", "outzero");
+        
+        assertTrue(petriNetwork.getTransition("T1").getOutArcs().stream().anyMatch(arc -> arc instanceof OutZeroArc));
+        assertEquals(1, petriNetwork.getTransition("T1").getOutArcs().size());
+    }
+
+    @Test
+    @Order(20)
+    public void testCreateOutBouncerArcAndVerifyInOutArcsList() throws RepeatedNameElement, ElementNameNotExists, InvalidWeightNumber, InvalidTokenNumber, RepeatedArc {
+        petriNetwork.addPlace("P1", 3);
+        petriNetwork.addTransition("T1");
+        petriNetwork.addArc("A2", "T1", "P1", "outbouncer");
+        
+        assertTrue(petriNetwork.getTransition("T1").getOutArcs().stream().anyMatch(arc -> arc instanceof OutBouncerArc));
+        assertEquals(1, petriNetwork.getTransition("T1").getOutArcs().size());
+    }
+
+    @Test
+    @Order(21)
+    public void testCreateInvalidArcTypeThrowsException() throws RepeatedNameElement, ElementNameNotExists, InvalidTokenNumber, InvalidWeightNumber {
+        petriNetwork.addPlace("P1", 3);
+        petriNetwork.addTransition("T1");
+        
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            petriNetwork.addArc("A3", "T1", "P1", "inBouncer");
+        });
+        assertEquals("No valid inBouncer arc type", thrown.getMessage());
     }
 
 }

@@ -84,4 +84,14 @@ class InArcTest {
         inArc.setLabel("a2");
         assertEquals("a2", inArc.getLabel());
     }
+    
+    @Test
+    @Order(9)
+    void testSetInvalidWeight() throws InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1", testPlace, testTransition, 3);
+        InvalidWeightNumber thrown = assertThrows(InvalidWeightNumber.class, () -> {
+            inArc.setWeight(-5);
+        });
+        assertEquals("Invalid weight < 1", thrown.getMessage());
+    }
 }
