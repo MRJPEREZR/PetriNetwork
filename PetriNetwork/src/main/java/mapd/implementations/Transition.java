@@ -43,6 +43,7 @@ public class Transition {
 	public void addInArc(InArc inArc) throws RepeatedArc {
 		if (!existedArc(this.inArcs, inArc)) {
 			this.inArcs.add(inArc);
+			updateIsFireable();
 		} else {
 			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
@@ -72,7 +73,7 @@ public class Transition {
 
 	public void updateIsFireable() {
 		outArcs.stream().forEach(OutArc::updateIsActive);
-        this.isFireable = outArcs.stream().anyMatch(arc -> arc.isActive()) && (outArcs.size() > 0 );
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.isActive()) || (outArcs.size() == 0 && inArcs.size() > 0 );
     }
 
 	public void fire() {

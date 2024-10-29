@@ -111,7 +111,9 @@ public class TransitionTest {
     @Order(10)
     public void testFireWhenFireableAndNotHaveOutArcs() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber {
     	inArc = new InArc("a1", place, transition);
-        assertFalse(transition.isFireable());
+    	assertTrue(transition.isFireable());
+        transition.fire();
+        assertEquals(1, transition.getInArcs().get(0).getPlace().getTokens());
     }
 
 
