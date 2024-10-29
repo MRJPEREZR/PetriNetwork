@@ -328,9 +328,6 @@ public class PetriNetwork implements IPetriNetwork {
 	@Override
 	public void fire(String label) throws ElementNameNotExists {
 		System.out.println("Firing Transition " + label);
-
-		System.out.println("Before fire transition");
-		showPlaces();
 		
 		getTransition(label).fire();
 		updateTransitions();
