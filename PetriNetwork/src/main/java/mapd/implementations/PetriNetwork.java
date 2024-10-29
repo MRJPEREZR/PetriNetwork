@@ -22,6 +22,24 @@ public class PetriNetwork implements IPetriNetwork {
 	private HashMap<String, Arc> arcs;
 	
 	/**
+	 * Default constructor for the PetriNetwork class.
+	 * <p>
+	 * Initializes the internal structures required to model a Petri net, 
+	 * which includes collections for places, transitions, arcs, and records.
+	 * <ul>
+	 *   <li>places: A HashMap to store Place objects, indexed by their unique String identifiers.</li>
+	 *   <li>transitions: A HashMap to store Transition objects, indexed by their unique String identifiers.</li>
+	 *   <li>arcs: A HashMap to store Arc objects, indexed by their unique String identifiers.</li>
+	 *   <li>records: An ArrayList to store lists of strings, which might represent logs or history of the network's state changes.</li>
+	 * </ul>
+	 */
+	private PetriNetwork() {
+		this.places = new HashMap<String, Place>();
+		this.transitions = new HashMap<String, Transition>();
+		this.arcs = new HashMap<String, Arc>();
+	}
+	
+	/**
      * Retrieves the singleton instance of the PetriNetwork.
      * <p>
      * If the instance does not exist, it creates a new instance.
@@ -34,6 +52,18 @@ public class PetriNetwork implements IPetriNetwork {
             instance = new PetriNetwork();
         }
         return instance;
+    }
+	
+	/**
+     * Resets the Petri network by clearing all places, transitions, and arcs.
+     * <p>
+     * This method is useful for setting up a clean state, especially for testing purposes.
+     */
+	
+	public void reset() {
+        this.places.clear();
+        this.transitions.clear();
+        this.arcs.clear();
     }
 
 	/**
@@ -184,6 +214,18 @@ public class PetriNetwork implements IPetriNetwork {
 		} else {
 			throw new RepeatedNameElement("A transition already exists with this name");
 		}
+	}
+	
+	/**
+     * Updates the fireable status of each transition in the network.
+     * <p>
+     * This method checks and updates each transition to determine whether it is currently fireable
+     * based on the state of the associated places and arcs.
+     */
+	private void updateTransitions() {
+		transitions.forEach((key, transition) -> {
+			transition.updateIsFireable();
+		});
 	}
 
 	/**
@@ -494,47 +536,4 @@ public class PetriNetwork implements IPetriNetwork {
             	throw new IllegalArgumentException("No valid " + type + " arc type");
         }
     }
-	
-	/**
-	 * Default constructor for the PetriNetwork class.
-	 * <p>
-	 * Initializes the internal structures required to model a Petri net, 
-	 * which includes collections for places, transitions, arcs, and records.
-	 * <ul>
-	 *   <li>places: A HashMap to store Place objects, indexed by their unique String identifiers.</li>
-	 *   <li>transitions: A HashMap to store Transition objects, indexed by their unique String identifiers.</li>
-	 *   <li>arcs: A HashMap to store Arc objects, indexed by their unique String identifiers.</li>
-	 *   <li>records: An ArrayList to store lists of strings, which might represent logs or history of the network's state changes.</li>
-	 * </ul>
-	 */
-	private PetriNetwork() {
-		this.places = new HashMap<String, Place>();
-		this.transitions = new HashMap<String, Transition>();
-		this.arcs = new HashMap<String, Arc>();
-	}
-	
-	/**
-     * Resets the Petri network by clearing all places, transitions, and arcs.
-     * <p>
-     * This method is useful for setting up a clean state, especially for testing purposes.
-     */
-	
-	public void reset() {
-        this.places.clear();
-        this.transitions.clear();
-        this.arcs.clear();
-    }
-	
-	/**
-     * Updates the fireable status of each transition in the network.
-     * <p>
-     * This method checks and updates each transition to determine whether it is currently fireable
-     * based on the state of the associated places and arcs.
-     */
-	private void updateTransitions() {
-		transitions.forEach((key, transition) -> {
-			transition.updateIsFireable();
-		});
-	}
-
 }
