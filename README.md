@@ -13,6 +13,45 @@ Copy and paste this into your folder destination. You must have configured your 
 git clone git@gitlab-df.imt-atlantique.fr:a24miran/petrinetwork.git
 ```
 
+## Project Structure
+```
+PetriNetwork
+├──src
+    ├── main
+    │   └── java
+    │       └── mapd
+    │           ├── exceptions
+    │           │   ├── ElementNameNotExists.java
+    │           │   ├── InvalidTokenNumber.java
+    │           │   ├── InvalidWeightNumber.java
+    │           │   ├── RepeatedArc.java
+    │           │   └── RepeatedNameElement.java
+    │           ├── implementations
+    │           │   ├── Arc.java
+    │           │   ├── InArc.java
+    │           │   ├── Main.java
+    │           │   ├── OutArc.java
+    │           │   ├── OutBouncerArc.java
+    │           │   ├── OutZeroArc.java
+    │           │   ├── PetriNetwork.java
+    │           │   ├── Place.java
+    │           │   └── Transition.java
+    │           └── interfaces
+    │               └── IPetriNetwork.java
+    └── test
+        └── java
+            └── mapd
+                ├── InArcTest.java
+                ├── MutexNetworkTest.java
+                ├── OutArcTest.java
+                ├── OutBouncerArcTest.java
+                ├── OutZeroArcTest.java
+                ├── PetriNetworkTest.java
+                ├── PlaceTest.java
+                ├── SimpleNetworkTest.java
+                └── TransitionTest.java
+```
+
 ## How to run
 
 In the **`Main.java`** file you can find the main function to execute the program. There is a Petri Network already created to emulated the behavior of the following example:
@@ -99,7 +138,7 @@ To fire one of these transitions, call the function:
 net.fire("t2");
 ```
 
-This fire transition `t2`, and prints the network with updated place's tokens:
+This fires transition `t2`, and prints the network with updated place's tokens:
 ```
 Place's list:
 1: p1 with 1 tokens, 1 OutArcs, 1 InArcs
@@ -109,9 +148,8 @@ Place's list:
 5: p5 with 1 tokens, 1 OutArcs, 1 InArcs
 ```
 
-The UML model was created to be aligned with the following prepositions:
-
 ## Elements
+The UML model was created to be aligned with the following prepositions:
 
 - Place: It can have a token quantity equals or greater than 0 (token >= 0). 
 - Transition: It can be blocked or available depending on the place source's token, arc's weight and arc's type (see more in ```special considerations```).  
@@ -149,41 +187,7 @@ The UML model was created to be aligned with the following prepositions:
 ### Class Diagram
 ![Sequence Diagram](Docs/Modelling/PN_Diagram_Final_modified.png)
 
-### Project Structure
 
-```
-PetriNetwork
-└── src
-     ├── main
-     │   └── java
-     │       └── mapd
-     │           ├── exceptions
-     │           │   ├── ElementNameNotExists.java
-     │           │   ├── InvalidTokenNumber.java
-     │           │   ├── InvalidWeightNumber.java
-     │           │   ├── RepeatedArc.java
-     │           │   └── RepeatedNameElement.java
-     │           ├── implementations
-     │           │   ├── Arc.java
-     │           │   ├── Dashboard.java
-     │           │   ├── InArc.java
-     │           │   ├── OutArc.java
-     │           │   ├── OutBouncerArc.java
-     │           │   ├── OutZeroArc.java
-     │           │   ├── PetriNetwork.java
-     │           │   ├── Place.java
-     │           │   └── Transition.java
-     │           └── interfaces
-     │               └── IPetriNetwork.java
-     └── test
-         └── java
-             └── mapd
-                 ├── InArcTest.java
-                 ├── OutArcTest.java
-                 ├── PetriNetworkTest.java
-                 ├── PlaceTest.java
-                 └── TransitionTest.java
-```
 
 
 
