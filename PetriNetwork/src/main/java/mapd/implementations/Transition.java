@@ -16,7 +16,7 @@ public class Transition {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;
-		this.isFireable = true;
+		this.isFireable = false;
 	}
 	
 	public void setLabel(String label) {
@@ -72,7 +72,7 @@ public class Transition {
 
 	public void updateIsFireable() {
 		outArcs.stream().forEach(OutArc::updateIsActive);
-        this.isFireable = outArcs.stream().anyMatch(arc -> arc.isActive()) || (outArcs.size() == 0 && inArcs.size() != 1);
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.isActive()) && (outArcs.size() > 0 );
     }
 
 	public void fire() {
