@@ -7,6 +7,7 @@ import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 import mapd.exceptions.InvalidTokenNumber;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,58 +18,70 @@ class InArcTest {
 
     @BeforeEach
     void setUp() throws InvalidTokenNumber {
-        testPlace = new Place("p");
-        testPlace.setTokens(5);
+        testPlace = new Place("p", 5);
         testTransition = new Transition("t");
     }
 
     @Test
-    void testInArcCreationWithDefaultWeight() {
-        InArc inArc = new InArc("a1",testPlace);
+    @Order(1)
+    void testInArcCreationWithDefaultWeight() throws InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1",testPlace, testTransition);
         assertEquals(testPlace, inArc.getPlace());
         assertEquals(1, inArc.getWeight());
     }
 
     @Test
-    void testInArcCreationWithValidWeight() throws InvalidWeightNumber {
-        InArc inArc = new InArc("a1",testPlace, 3);
+    @Order(2)
+    void testInArcCreationWithValidWeight() throws InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1",testPlace, testTransition, 3);
         assertEquals(testPlace, inArc.getPlace());
         assertEquals(3, inArc.getWeight());
     }
 
     @Test
+    @Order(3)
     void testInArcCreationWithInvalidWeight() {
         InvalidWeightNumber thrown = assertThrows(InvalidWeightNumber.class, () -> {
-            new InArc("a1",testPlace, 0);
+            new InArc("a1",testPlace, testTransition, 0);
         });
         assertEquals("Invalid weight < 1", thrown.getMessage());
     }
 
     @Test
-    void testModifyTokens() throws InvalidTokenNumber, InvalidWeightNumber {
-        InArc inArc = new InArc("a1",testPlace, 2);
+    @Order(4)
+    void testModifyTokens() throws InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1",testPlace, testTransition, 2);
         inArc.modifyTokens();
         assertEquals(7, testPlace.getTokens());
     }
 
     @Test
-    void testModifyTokensWithDefaultWeight() throws InvalidTokenNumber {
-        InArc inArc = new InArc("a1",testPlace);
+    @Order(5)
+    void testModifyTokensWithDefaultWeight() throws InvalidTokenNumber, InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1",testPlace, testTransition);
         inArc.modifyTokens();
         assertEquals(6, testPlace.getTokens());
     }
 
     @Test
-    void testAddToTransition() throws RepeatedArc {
-        InArc inArc = new InArc("a1",testPlace);
-        inArc.addToTransition(testTransition);
+    @Order(6)
+    void testAddToTransition() throws RepeatedArc, InvalidWeightNumber {
+        InArc inArc = new InArc("a1",testPlace, testTransition);
         assertTrue(testTransition.getInArcs().contains(inArc));
     }
 
     @Test
-    void testToString() throws InvalidWeightNumber {
-        InArc inArc = new InArc("a1",testPlace, 4);
-        System.out.println(inArc.toString());
+    @Order(7)
+    void testToString() throws InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1",testPlace, testTransition, 4);
         assertTrue(inArc.toString().equals("In arc has weight 4"));
+    }
+    
+    @Test
+    @Order(8)
+    void testToChangeLabel() throws InvalidWeightNumber, RepeatedArc {
+        InArc inArc = new InArc("a1",testPlace, testTransition, 4);
+        inArc.setLabel("a2");
+        assertEquals("a2", inArc.getLabel());
     }
 }

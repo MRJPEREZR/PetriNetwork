@@ -10,11 +10,13 @@ public class Transition {
 	private List<InArc> inArcs;
 	private List<OutArc> outArcs;
 	private String label;
+	private Boolean isFireable;
 
 	public Transition(String label) {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;
+		this.isFireable = false;
 	}
 	
 	public void setLabel(String label) {
@@ -23,11 +25,6 @@ public class Transition {
 
 	public String getLabel() {
 		return label;
-	}
-
-	private Boolean existedArc(List<? extends Arc> arcs, Arc newArc) {
-		Place place = newArc.getPlace();
-        return arcs.stream().anyMatch(arc -> arc.getPlace().getLabel().equals(place.getLabel()));
 	}
 
 	public List<InArc> getInArcs() {
@@ -41,6 +38,7 @@ public class Transition {
 	public void addInArc(InArc inArc) throws RepeatedArc {
 		if (!existedArc(this.inArcs, inArc)) {
 			this.inArcs.add(inArc);
+			updateIsFireable();
 		} else {
 			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
@@ -49,6 +47,7 @@ public class Transition {
 	public void addOutArc(OutArc outArc) throws RepeatedArc {
 		if (!existedArc(this.outArcs, outArc)) {
 			this.outArcs.add(outArc);
+			updateIsFireable();
 		} else {
 			throw new RepeatedArc("An Arc in the same direction already exists");
 		}
@@ -60,15 +59,20 @@ public class Transition {
 
 	public void rmOutArc(OutArc outArc) {
 		this.outArcs.remove(outArc);
+		updateIsFireable();
+	}
+	
+	public Boolean isFireable() {
+		return this.isFireable;
 	}
 
-	public Boolean isFireable() {
-		this.outArcs.stream().forEach(OutArc::setIsActive);
-        return outArcs.stream().anyMatch(arc -> arc.getIsActive());
+	public void updateIsFireable() {
+		outArcs.stream().forEach(OutArc::updateIsActive);
+        this.isFireable = outArcs.stream().anyMatch(arc -> arc.isActive()) || (outArcs.size() == 0 && inArcs.size() > 0 );
     }
 
 	public void fire() {
-		if (isFireable()) {
+		if (isFireable) {
 			System.out.println("Firing ...");
 			outArcs.stream().forEach(arg0 -> {
 				try {
@@ -84,6 +88,7 @@ public class Transition {
 					e.printStackTrace();
 				}
 			});
+			updateIsFireable();
 		} else {
 			System.out.println("Transition is not fireable");
 		}
@@ -92,6 +97,11 @@ public class Transition {
 	@Override
 	public String toString () {
 		return "InArcs: " + this.getInArcs() + "OutArcs: " + this.getOutArcs();
+	}
+
+	private Boolean existedArc(List<? extends Arc> arcs, Arc newArc) {
+		Place place = newArc.getPlace();
+        return arcs.stream().anyMatch(arc -> arc.getPlace().getLabel().equals(place.getLabel()));
 	}
 
 }

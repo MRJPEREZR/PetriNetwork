@@ -9,18 +9,12 @@ public abstract class Arc {
 	private Place place;
 	private int weight;
 	private String label;
-	
-	private Boolean isValidWeight(Integer weight) {
-		return weight >= 1;
+
+	public Arc(String label, Place place) throws InvalidWeightNumber, RepeatedArc  {
+		this(label, place, 1);
 	}
 
-	public Arc(String label, Place place) {
-		this.place = place;
-		this.weight = 1;
-		this.label = label;
-	}
-
-	public Arc(String label, Place place, int weight) throws InvalidWeightNumber {
+	public Arc(String label, Place place, int weight) throws InvalidWeightNumber, RepeatedArc {
 		this.place = place;
 		this.label = label;
 		if (isValidWeight(weight)) {
@@ -32,10 +26,6 @@ public abstract class Arc {
 
 	public Place getPlace() {
 		return place;
-	}
-
-	public void setPlace(Place place) {
-		this.place = place;
 	}
 
 	public int getWeight() {
@@ -61,4 +51,7 @@ public abstract class Arc {
 	public abstract void modifyTokens() throws InvalidTokenNumber;
 	public abstract void addToTransition(Transition transition) throws RepeatedArc;
 
+	private Boolean isValidWeight(Integer weight) {
+		return weight >= 1;
+	}
 }

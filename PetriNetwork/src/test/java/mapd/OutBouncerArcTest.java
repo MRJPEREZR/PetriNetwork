@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import mapd.exceptions.InvalidTokenNumber;
+import mapd.exceptions.InvalidWeightNumber;
 import mapd.exceptions.RepeatedArc;
 import mapd.implementations.OutArc;
 import mapd.implementations.OutBouncerArc;
@@ -26,37 +28,38 @@ public class OutBouncerArcTest {
     }
 
     @Test
-    void testOutBouncerArcCreation() {
-        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace);
+    @Order(1)
+    void testOutBouncerArcCreation() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace, testTransition);
+        System.out.println(outBouncerArc);
         assertEquals(testPlace, outBouncerArc.getPlace());
-        assertFalse(outBouncerArc.getIsActive());
+        assertFalse(outBouncerArc.isActive());
     }
     
     @Test
-    void testOutBouncerArcActivation() throws RepeatedArc, InvalidTokenNumber {
-        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace);
-        outBouncerArc.addToTransition(testTransition);
+    @Order(2)
+    void testOutBouncerArcActivation() throws RepeatedArc, InvalidTokenNumber, InvalidWeightNumber {
+        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace, testTransition);
         testPlace.setTokens(10);
-        outBouncerArc.setIsActive();
-        assertTrue(testTransition.isFireable());
+        outBouncerArc.updateIsActive();
+        assertTrue(outBouncerArc.isActive());
     }
     
     @Test
-    void testOutBouncerArcIsFirableTransition() throws RepeatedArc, InvalidTokenNumber {
-        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace);
-        outBouncerArc.addToTransition(testTransition);
+    @Order(3)
+    void testOutBouncerArcIsFirableTransition() throws RepeatedArc, InvalidTokenNumber, InvalidWeightNumber {
+        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace, testTransition);
         testPlace.setTokens(10);
-        assertTrue(testTransition.isFireable());
-    }
-    
-    @Test
-    void testOutBouncerFire() throws RepeatedArc, InvalidTokenNumber {
-        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace);
-        outBouncerArc.addToTransition(testTransition);
-        testPlace.setTokens(10);
-        testTransition.isFireable();
-        testTransition.fire();
+        outBouncerArc.updateIsActive();
+        outBouncerArc.modifyTokens();
         assertEquals(testPlace.getTokens(), (Integer) 0);
+    }
+    
+    @Test
+    @Order(4)
+    void testToString() throws InvalidWeightNumber, RepeatedArc {
+        OutArc outBouncerArc = new OutBouncerArc("a1", testPlace, testTransition);
+        assertTrue(outBouncerArc.toString().equals("Bouncer out arc has weight 1 and it is false"));
     }
 
 }

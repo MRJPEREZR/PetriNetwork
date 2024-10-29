@@ -6,7 +6,6 @@ public class Main {
 		try {
 			// PetriNetwork Mutex topology example
 			PetriNetwork net = new PetriNetwork();
-			
 			// Places
 			net.addPlace("p1");
 			net.addPlace("p2", 1);

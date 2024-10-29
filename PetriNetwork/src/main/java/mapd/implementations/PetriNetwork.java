@@ -82,9 +82,10 @@ public class PetriNetwork implements IPetriNetwork {
 	 * 
 	 * @param label The unique identifier for the Place to be added.
 	 * @throws RepeatedNameElement If a Place with the specified label already exists in the network.
+	 * @throws InvalidTokenNumber 
 	 */
 	@Override
-	public void addPlace(String label) throws RepeatedNameElement {
+	public void addPlace(String label) throws RepeatedNameElement, ElementNameNotExists, InvalidTokenNumber {
 		if (!this.places.containsKey(label)) {
 			Place place = new Place(label);
 			this.places.put(label, place);
@@ -199,36 +200,6 @@ public class PetriNetwork implements IPetriNetwork {
 	}
 	
 	/**
-	 * Creates a new Arc object of the specified type, associated with a given Place and weight.
-	 * <p>
-	 * This method constructs an Arc based on the provided type (e.g., "in", "out", "outzero", "outbouncer"), 
-	 * associating it with the specified Place and weight. If the weight is not provided (i.e., null), 
-	 * a default weight of 1 is used. If the type is invalid, an exception is thrown.
-	 * 
-	 * @param type      The type of the Arc to be created (e.g., "in", "out", "outzero", "outbouncer").
-	 * @param place     The Place object to which the Arc will be associated.
-	 * @param newWeight The weight of the Arc. If null, the default weight of 1 is used.
-	 * @return The newly created Arc of the specified type.
-	 * @throws InvalidWeightNumber   If the provided weight is invalid (e.g., negative).
-	 * @throws IllegalArgumentException If the specified arc type is not recognized.
-	 */
-	private Arc createArc(String label, String type, Place place, Integer newWeight) throws InvalidWeightNumber {
-		int weight = (newWeight == null) ? 1 : newWeight;
-        switch (type.toLowerCase()) {
-            case "in":
-                return new InArc(label, place, weight);
-            case "out":
-                return new OutArc(label, place, weight);
-            case "outzero":
-                return new OutZeroArc(label, place, weight);
-            case "outbouncer":
-                return new OutBouncerArc(label, place, weight);
-            default:
-            	throw new IllegalArgumentException("No valid " + type + " arc type");
-        }
-    }
-	
-	/**
 	 * Adds a new Arc to the Petri network, linking a specified Transition and Place.
 	 * <p>
 	 * This method creates an Arc of the given type between the specified Transition and Place,
@@ -252,8 +223,7 @@ public class PetriNetwork implements IPetriNetwork {
 		if (!this.arcs.containsKey(label)) {
 			Place place = this.getPlace(placeLabel);
 			Transition transition = this.getTransition(transitionLabel);
-			Arc arc = createArc(label, type, place, weight);
-			arc.addToTransition(transition);
+			Arc arc = createArc(label, type, place, transition, weight);
 			this.arcs.put(label, arc);
 		} else {
 			throw new RepeatedNameElement("An arc already exists with this name");
@@ -266,8 +236,8 @@ public class PetriNetwork implements IPetriNetwork {
 		if (!this.arcs.containsKey(label)) {
 			Place place = this.getPlace(placeLabel);
 			Transition transition = this.getTransition(transitionLabel);
-			Arc arc = createArc(label, type, place, null);
-			arc.addToTransition(transition);
+			
+			Arc arc = createArc(label, type, place, transition, null);
 			this.arcs.put(label, arc);
 		} else {
 			throw new RepeatedNameElement("An arc already exists with this name");
@@ -349,6 +319,7 @@ public class PetriNetwork implements IPetriNetwork {
 		showPlaces();
 		
 		getTransition(label).fire();
+		updateTransitions();
 		
 		System.out.println("After fire transition");
 		showPlaces();
@@ -424,6 +395,7 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renamePlace(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Place place = this.getPlace(oldName);
 		if (place != null && !this.places.containsKey(newName)) {
+			place.setLabel(newName);
 			this.places.remove(oldName);
 			places.put(newName, place);
 		} else {
@@ -448,6 +420,7 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renameTransition(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Transition transition = this.getTransition(oldName);
 		if (transition != null && !this.transitions.containsKey(newName)) {
+			transition.setLabel(newName);
 			this.transitions.remove(oldName);
 			this.transitions.put(newName, transition);
 		} else {
@@ -472,11 +445,49 @@ public class PetriNetwork implements IPetriNetwork {
 	public void renameArc(String oldName, String newName) throws RepeatedNameElement, ElementNameNotExists {
 		Arc arc = this.getArc(oldName);
 		if (arc != null && !this.arcs.containsKey(newName)) {
+			arc.setLabel(newName);
 			this.arcs.remove(oldName);
 			this.arcs.put(newName, arc);
 		} else {
 			throw new RepeatedNameElement("New arc name already exists");
 		}
+	}
+	
+	/**
+	 * Creates a new Arc object of the specified type, associated with a given Place and weight.
+	 * <p>
+	 * This method constructs an Arc based on the provided type (e.g., "in", "out", "outzero", "outbouncer"), 
+	 * associating it with the specified Place and weight. If the weight is not provided (i.e., null), 
+	 * a default weight of 1 is used. If the type is invalid, an exception is thrown.
+	 * 
+	 * @param type      The type of the Arc to be created (e.g., "in", "out", "outzero", "outbouncer").
+	 * @param place     The Place object to which the Arc will be associated.
+	 * @param newWeight The weight of the Arc. If null, the default weight of 1 is used.
+	 * @return The newly created Arc of the specified type.
+	 * @throws InvalidWeightNumber   If the provided weight is invalid (e.g., negative).
+	 * @throws RepeatedArc 
+	 * @throws IllegalArgumentException If the specified arc type is not recognized.
+	 */
+	private Arc createArc(String label, String type, Place place, Transition transition, Integer newWeight) throws InvalidWeightNumber, RepeatedArc {
+		int weight = (newWeight == null) ? 1 : newWeight;
+        switch (type.toLowerCase()) {
+            case "in":
+                return new InArc(label, place, transition, weight);
+            case "out":
+                return new OutArc(label, place, transition, weight);
+            case "outzero":
+                return new OutZeroArc(label, place, transition, weight);
+            case "outbouncer":
+                return new OutBouncerArc(label, place, transition, weight);
+            default:
+            	throw new IllegalArgumentException("No valid " + type + " arc type");
+        }
+    }
+
+	private void updateTransitions() {
+		transitions.forEach((key, transition) -> {
+			transition.updateIsFireable();
+		});
 	}
 
 }
