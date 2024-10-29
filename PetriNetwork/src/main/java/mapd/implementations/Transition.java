@@ -16,7 +16,7 @@ public class Transition {
 		this.inArcs = new ArrayList<InArc>(); 
 		this.outArcs = new ArrayList<OutArc>();
 		this.label = label;
-		this.isFireable = false;
+		this.isFireable = true;
 	}
 	
 	public void setLabel(String label) {

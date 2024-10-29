@@ -106,10 +106,20 @@ public class TransitionTest {
         assertEquals(0, transition.getOutArcs().get(0).getPlace().getTokens());
         assertEquals(1, transition.getInArcs().get(0).getPlace().getTokens());
     }
+    
+    @Test
+    @Order(10)
+    public void testFireWhenFireableAndNotHaveOutArcs() throws InvalidTokenNumber, RepeatedArc, InvalidWeightNumber {
+    	inArc = new InArc("a1", place, transition);
+        assertTrue(transition.isFireable());
+        transition.fire();
+        assertFalse(transition.isFireable());
+        assertEquals(1, transition.getInArcs().get(0).getPlace().getTokens());
+    }
 
 
     @Test
-    @Order(10)
+    @Order(11)
     public void testToString() {
         String expected = "InArcs: " + transition.getInArcs() + "OutArcs: " + transition.getOutArcs();
         assertTrue(transition.toString().equals(expected));
