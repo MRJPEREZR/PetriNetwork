@@ -7,7 +7,7 @@ import mapd.exceptions.RepeatedArc;
 public abstract class Arc {
 
     private Place place;
-    private int weight;
+    private Integer weight;
     private String label;
 
     /**
