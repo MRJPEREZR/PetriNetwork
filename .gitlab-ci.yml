@@ -1,0 +1,26 @@
+stages:
+  - build
+  - run
+
+build:
+  stage: build
+  script:
+  - java --version
+   - cd PetriNetwork/
+   - mkdir bin
+   - javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
+  artifacts:
+  - bin/
+
+run:
+  stage: run
+  script:
+  - java --version
+  - cd PetriNetwork/bin/
+  - echo Running Main
+  - java mapd.implementations.Main
+
+  
+
+
+
