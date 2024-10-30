@@ -42,18 +42,18 @@ PetriNetwork
         └── java
             └── mapd
                 ├──InArcTest.java
-│               ├── MutexNetworkBouncerAndZeroTest.java
-│               ├── MutexNetworkBouncerArcsTest.java
-│               ├── MutexNetworkTest.java
-│               ├── MutexNetworkZeroArcsTest.java
-│               ├── OutArcTest.java
-│               ├── OutBouncerArcTest.java
-│               ├── OutZeroArcTest.java
-│               ├── PetriNetworkTest.java
-│               ├── PlaceTest.java
-│               ├── showElementsTest.java
-│               ├── SimpleNetworkTest.java
-│               └── TransitionTest.java
+                ├── MutexNetworkBouncerAndZeroTest.java
+                ├── MutexNetworkTest.java
+                ├── MutexNetworkZeroArcsTest.java
+                ├── OutArcTest.java
+                ├── OutBouncerArcTest.java
+                ├── OutZeroArcTest.java
+                ├── PetriNetworkTest.java
+                ├── PlaceTest.java
+                ├── MutexNetworkBouncerArcsTest.java
+                ├── showElementsTest.java
+                ├── SimpleNetworkTest.java
+                └── TransitionTest.java
 ```
 
 ## How to run
