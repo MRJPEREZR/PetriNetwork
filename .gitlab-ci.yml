@@ -12,7 +12,7 @@ build:
    - javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
   artifacts:
     paths:
-     - bin/
+     - PetriNetwork/bin/
 
 run:
   stage: run
