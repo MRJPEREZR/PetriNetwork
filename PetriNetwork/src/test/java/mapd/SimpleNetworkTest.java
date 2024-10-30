@@ -22,7 +22,7 @@ public class SimpleNetworkTest {
 	
 	PetriNetwork net = PetriNetwork.getInstance();
 
-	@BeforeEach()
+	@BeforeEach
 	public void setup() throws RepeatedNameElement, InvalidWeightNumber, RepeatedArc, ElementNameNotExists, InvalidTokenNumber {
 		net.reset();
 		net.addPlace("p1", 1);
