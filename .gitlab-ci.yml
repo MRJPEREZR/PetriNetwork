@@ -4,7 +4,7 @@ stages:
 
 build:
   stage: build
-  image: java:openjdk-8-jdk-alpine
+  image: maven:3-jdk-8
   script:
   - java --version
    - cd PetriNetwork/
@@ -16,7 +16,7 @@ build:
 
 run:
   stage: run
-  image: java:openjdk-8-jdk-alpine
+  image: maven:3-jdk-8
   script:
   - java --version
   - cd PetriNetwork/bin/
