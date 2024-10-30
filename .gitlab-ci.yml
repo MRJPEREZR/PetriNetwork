@@ -4,6 +4,7 @@ stages:
 
 build:
   stage: build
+  image: java:8
   script:
   - java --version
    - cd PetriNetwork/
@@ -15,6 +16,7 @@ build:
 
 run:
   stage: run
+  image: java:8
   script:
   - java --version
   - cd PetriNetwork/bin/
