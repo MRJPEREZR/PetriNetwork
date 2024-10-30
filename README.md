@@ -59,6 +59,7 @@ PetriNetwork
 ## How to run
 
 In the **`Main.java`** file you can find the main function to execute the program. There is a Petri Network already created to emulated the behavior of the following example:
+
 ![PetriNetworkExample](Docs/Mutex.png)
 
 The code to describe this network is:
