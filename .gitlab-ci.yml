@@ -7,12 +7,12 @@ build:
   image: maven:3-jdk-8
   script:
   - java -version
-   - cd PetriNetwork/
-   - mkdir bin
-   - javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
+  - cd PetriNetwork/
+  - mkdir bin
+  - javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
   artifacts:
     paths:
-     - PetriNetwork/bin/
+    - PetriNetwork/bin/
 
 run:
   stage: run
