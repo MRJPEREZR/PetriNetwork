@@ -43,8 +43,6 @@ test:
   # java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
   org.junit.platform.console.ConsoleLauncher --scan-classpath
 
-
-
 run:
   stage: run
   image: maven:3-jdk-8
