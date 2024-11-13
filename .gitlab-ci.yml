@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - run
 
 build:
@@ -9,10 +10,40 @@ build:
   - java -version
   - cd PetriNetwork/
   - mkdir bin
-  - javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
+  - javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar -d bin \
+  $(find src/main/java src/test/java -name "*.java")
+  #- javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
   artifacts:
     paths:
     - PetriNetwork/bin/
+test:
+  stage: test
+  image: maven:3-jdk-8
+  script:
+  - cd PetriNetwork/
+  - mkdir lib
+  - cd lib/
+  - curl -O https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.9.3/junit-platform-console-standalone-1.9.3.jar
+  - curl -O https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.7.2/junit-jupiter-api-5.7.2.jar
+  - curl -O https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.7.2/junit-jupiter-engine-5.7.2.jar
+  - cd ..
+  - java -version
+  - java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
+  org.junit.platform.console.ConsoleLauncher --scan-classpath
+
+  # javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
+  $(find src/main/java src/test/java -name "*.java")
+
+  # javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar -d bin \
+  $(find src/main/java src/test/java -name "*.java")
+
+  # java -cp .:src/main/java:src/test/java:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
+  org.junit.platform.console.ConsoleLauncher --scan-classpath
+
+  # java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
+  org.junit.platform.console.ConsoleLauncher --scan-classpath
+
+
 
 run:
   stage: run
