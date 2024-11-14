@@ -9,23 +9,24 @@ build:
   script:
   - java -version
   - cd PetriNetwork/
-  - mkdir bin
-  - javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar -d bin $(find src/main/java src/test/java -name "*.java")
-  #- javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
-  artifacts:
-    paths:
-    - PetriNetwork/bin/
-test:
-  stage: test
-  image: maven:3-jdk-8
-  script:
-  - cd PetriNetwork/
   - mkdir lib
   - cd lib/
   - curl -O https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.9.3/junit-platform-console-standalone-1.9.3.jar
   - curl -O https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-api/5.7.2/junit-jupiter-api-5.7.2.jar
   - curl -O https://repo1.maven.org/maven2/org/junit/jupiter/junit-jupiter-engine/5.7.2/junit-jupiter-engine-5.7.2.jar
   - cd ..
+  - mkdir bin
+  - javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar -d bin $(find src/main/java src/test/java -name "*.java")
+  #- javac -d bin/ src/main/java/mapd/exceptions/* src/main/java/mapd/interfaces/* src/main/java/mapd/implementations/*
+  artifacts:
+    paths:
+    - PetriNetwork/bin/
+    - PetriNetwork/lib/
+test:
+  stage: test
+  image: maven:3-jdk-8
+  script:
+  - cd PetriNetwork/
   - java -version
   - java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
 
