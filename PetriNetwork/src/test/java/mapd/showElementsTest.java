@@ -76,24 +76,22 @@ public class showElementsTest {
 	public void testShowAllElements() {
 		net.showAllElements();
 		String message = 
-				"""
-				Petri Network
-				4 places
-				1 transitions
-				4 arcs
-				List of places:
-				1: place with 1 tokens, 1 simple out arcs, 0 in arcs, 0 bouncer out arcs, 0 zero out arcs
-				2: place with 3 tokens, 1 simple out arcs, 0 in arcs, 0 bouncer out arcs, 0 zero out arcs
-				3: place with 0 tokens, 0 simple out arcs, 1 in arcs, 0 bouncer out arcs, 0 zero out arcs
-				4: place with 1 tokens, 0 simple out arcs, 1 in arcs, 0 bouncer out arcs, 0 zero out arcs
-				List of transitions:
-				1: t1, 2 in arcs, 2 out arcs
-				List of arcs:
-				1: simple out arc with weight 1 (from place with 1 tokens to transition)
-				2: simple out arc with weight 2 (from place with 3 tokens to transition)
-				3: simple in arc with weight 3 (transition to place with 0 tokens)
-				4: simple in arc with weight 1 (transition to place with 1 tokens)\n
-				""";
+			    "Petri Network\n" +
+			    "4 places\n" +
+			    "1 transitions\n" +
+			    "4 arcs\n" +
+			    "List of places:\n" +
+			    "1: place with 1 tokens, 1 simple out arcs, 0 in arcs, 0 bouncer out arcs, 0 zero out arcs\n" +
+			    "2: place with 3 tokens, 1 simple out arcs, 0 in arcs, 0 bouncer out arcs, 0 zero out arcs\n" +
+			    "3: place with 0 tokens, 0 simple out arcs, 1 in arcs, 0 bouncer out arcs, 0 zero out arcs\n" +
+			    "4: place with 1 tokens, 0 simple out arcs, 1 in arcs, 0 bouncer out arcs, 0 zero out arcs\n" +
+			    "List of transitions:\n" +
+			    "1: t1, 2 in arcs, 2 out arcs\n" +
+			    "List of arcs:\n" +
+			    "1: simple out arc with weight 1 (from place with 1 tokens to transition)\n" +
+			    "2: simple out arc with weight 2 (from place with 3 tokens to transition)\n" +
+			    "3: simple in arc with weight 3 (transition to place with 0 tokens)\n" +
+			    "4: simple in arc with weight 1 (transition to place with 1 tokens)";
 		assertEquals(message, outputStreamCaptor.toString());
 		
 	}
