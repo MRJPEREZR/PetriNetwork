@@ -29,17 +29,13 @@ test:
   - java -version
   - java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
 
-  # javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
-  $(find src/main/java src/test/java -name "*.java")
-
-  # javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar -d bin \
-  $(find src/main/java src/test/java -name "*.java")
-
-  # java -cp .:src/main/java:src/test/java:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
-  org.junit.platform.console.ConsoleLauncher --scan-classpath
-
-  # java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar \
-  org.junit.platform.console.ConsoleLauncher --scan-classpath
+  # Without specifying bin/ 
+  # javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar $(find src/main/java src/test/java -name "*.java")
+  # java -cp .:src/main/java:src/test/java:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
+  
+  # Specifying bin/
+  # javac -cp .:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar -d bin $(find src/main/java src/test/java -name "*.java")
+  # java -cp bin:lib/junit-platform-console-standalone-1.9.3.jar:lib/junit-jupiter-api-5.7.2.jar:lib/junit-jupiter-engine-5.7.2.jar org.junit.platform.console.ConsoleLauncher --scan-classpath
 
 run:
   stage: run
