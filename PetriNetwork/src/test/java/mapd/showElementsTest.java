@@ -92,7 +92,7 @@ public class showElementsTest {
 			    "2: simple out arc with weight 2 (from place with 3 tokens to transition)\n" +
 			    "3: simple in arc with weight 3 (transition to place with 0 tokens)\n" +
 			    "4: simple in arc with weight 1 (transition to place with 1 tokens)";
-		assertEquals(message, outputStreamCaptor.toString());
+		assertEquals(message, outputStreamCaptor.toString().trim());
 		
 	}
 	
