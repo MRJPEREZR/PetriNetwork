@@ -331,8 +331,31 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void rmArc(String label) throws ElementNameNotExists {
-		Arc arc = this.getArc(label);
+Arc arc = this.getArc(label);
+		
+		// Delete from transition
 		if (arc != null) {
+			if (arc instanceof InArc) {
+				// remove the arc from transition InArc list
+				Transition transitionAttached = transitions.entrySet()
+						.stream()
+						.filter(entry -> entry.getValue().getInArcs().contains(arc))
+						.map(Map.Entry::getValue)
+						.findFirst()
+						.orElse(null);
+				transitionAttached.rmInArc((InArc)arc);
+			}else {
+				// remove the arc from transition OutArc list
+				Transition transitionAttached = transitions.entrySet()
+						.stream()
+						.filter(entry -> entry.getValue().getOutArcs().contains(arc))
+						.map(Map.Entry::getValue)
+						.findFirst()
+						.orElse(null);
+				transitionAttached.rmOutArc((OutArc)arc);
+			}
+			
+			// Delete from PetriNetwork
 			this.arcs.remove(label);
 		}
 	}
