@@ -331,7 +331,7 @@ public class PetriNetwork implements IPetriNetwork {
 	 */
 	@Override
 	public void rmArc(String label) throws ElementNameNotExists {
-Arc arc = this.getArc(label);
+		Arc arc = this.getArc(label);
 		
 		// Delete from transition
 		if (arc != null) {
